@@ -1,14 +1,16 @@
-<html>
+<html lang="fr">
     <head>
 
+        <link rel="stylesheet" href="./style.css">
     </head>
     <body>
         <header>
             <h1>Voronoi battle</h1>
         </header>
         <div>
-            <canvas height="800" witdh="800" id="board"></canvas>
+            <canvas height="600" width="600" id="board"></canvas>
         </div>
+        <p id="log"></p>
         <div>
             
         </div>
@@ -16,9 +18,10 @@
 
         </footer>
     </body>
-    <script src="./root.js" />
+    <script src="./root.js" ></script>
+    <script src="./rhill-voronoi-core.min.js" ></script>
+
     <script>
-        initPos();
-        draw();
+    start();
     </script>
 </html>
