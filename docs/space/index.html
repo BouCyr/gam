@@ -1,22 +1,63 @@
 <html lang="fr">
     <head>
-
         <link rel="stylesheet" href="./style.css">
     </head>
     <body>
         <header>
-            <h1>Voronoi battle</h1>
+            <h1><span id="titleContent">Voronoi battle</span></h1>
         </header>
-        <div>
-            <canvas height="600" width="600" id="board"></canvas>
-        </div>
-        <p id="log"></p>
-        <div>
-            
-        </div>
-        <footer>
+        <main>
+            <aside id="hero" >
+                <h3>Good guys</h3>
 
+                <div class="scoreHolder">
+                    <h4>Border</h4>
+                    <p class="percent"><span class="score" score="borderPct"></span></p>
+                </div>
+            </aside>
+
+            <div id="canvasHolder">
+            <canvas height="600" width="600" id="board"></canvas>
+            </div>
+            <aside id="villain">
+                <h3>Bad guys</h3>
+
+                <div class="scoreHolder">
+                    <h4>Border</h4>
+                    <p class="percent"><span class="score" score="borderPct"></span></p>
+                </div>
+            </aside>
+
+        </main>
+        <footer>
+            <div id="cards">
+                <svg id="cardOne"   class="card villain">
+                    <!-- 2/5 ou 3/8 -->
+                    <line   x1="25" y1="25" x2="65" y2="110"    stroke="black" stroke-width="1" />
+                    <circle class="hero" r="5" cx="25" cy="25"  stroke="black" stroke-width="2" />
+                    <circle class="hero" r="8" cx="65" cy="110" stroke="black" stroke-width="3" />
+                </svg>
+                <svg id="cardTwo"   class="card hero">
+                    <!-- 2/5 ou 3/8 -->
+                    <line   x1="25" y1="25" x2="65" y2="110"    stroke="black" stroke-width="1" />
+                    <circle class="hero" r="5" cx="25" cy="25"  stroke="black" stroke-width="2" />
+                    <circle class="hero" r="8" cx="65" cy="110" stroke="black" stroke-width="3" />
+                </svg>
+                <svg id="cardThree" class="card villain">
+                    <!-- 2/5 ou 3/8 -->
+                    <line   x1="25" y1="25" x2="65" y2="110"    stroke="black" stroke-width="1" />
+                    <circle class="hero" r="5" cx="25" cy="25"  stroke="black" stroke-width="2" />
+                    <circle class="hero" r="8" cx="65" cy="110" stroke="black" stroke-width="3" />
+                </svg>
+                <svg id="cardfour"  class="card current hero"  height="140" width="90">
+                    <!-- 2/5 ou 3/8 -->
+                    <line   x1="25" y1="25" x2="65" y2="110"    stroke="black" stroke-width="1" />
+                    <circle class="hero" r="5" cx="25" cy="25"  stroke="black" stroke-width="2" />
+                    <circle class="hero" r="8" cx="65" cy="110" stroke="black" stroke-width="3" />
+                </svg>
+            </div>
         </footer>
+        <p id="log"></p>
     </body>
     <script src="./root.js" ></script>
     <script src="./rhill-voronoi-core.min.js" ></script>

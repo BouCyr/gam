@@ -2,7 +2,7 @@
 const EPSILON = 0.00000000001;
 
 var board = document.getElementById("board");
-var rect = board.getBoundingClientRect();
+
 var mouse = {};
 
 const SIZE = 600; //must match size of cancs
@@ -28,6 +28,8 @@ function start(){
     startLoop();
 
     board.addEventListener("mousemove", (e) => {
+            var rect = board.getBoundingClientRect();
+
             mouse.x = e.clientX - rect.left;
             mouse.y = e.clientY - rect.top;
     });
@@ -69,7 +71,18 @@ function initPos(dotsArray = dots){
 function startLoop(){
     window.requestAnimationFrame(step);
 }
+
 function step(timeStamp){
+
+//    var startTime = performance.now()
+//    var logTime = (step = "step") => {
+//        console.log(step+" (ms): ", performance.now()-startTime);
+//    }
+
+    if(timeStamp < 90){
+        window.setTimeout(()=>window.requestAnimationFrame(step), 90)
+    }
+
     var ctx = board.getContext('2d');
     ctx.clearRect(0,0, SIZE, SIZE);
 
@@ -77,9 +90,11 @@ function step(timeStamp){
     virtual.x = mouse.x;
     virtual.y = mouse.y;
     virtual.team=turn;
+    virtual.virtual = true;
 
     var selected = dots.filter(d=>d.selected)[0];
 
+    // actual move
     if(mouse.commit && selected && virtual && state === STATE_MOVE && validMove(selected, virtual)){
         selected.x = virtual.x;
         selected.y= virtual.y;
@@ -93,6 +108,25 @@ function step(timeStamp){
     //the actual situation of the gameboard
     var voronoi = computeCells(dots);
 
+    //compute score
+    var outsideEdges = voronoi.edges.filter(e => (!e.lSite)||(!e.rSite));
+    var evilScore = 0;
+    var heroScore = 0;
+    outsideEdges.forEach(e => {
+        var score = dist(e.va, e.vb);
+        if((e.lSite && e.lSite.team === TEAM_EVIL)){
+            evilScore += score;
+        }else{
+            heroScore += score;
+        }
+    });
+
+    document.querySelector("#hero [score='borderPct']").innerHTML = Math.round((100*heroScore)/(SIZE*4));
+    document.querySelector("#villain [score='borderPct']").innerHTML = Math.round((100*evilScore)/(SIZE*4));
+
+
+    drawCells(voronoi);
+
     if(selected && virtual && state === STATE_MOVE && validMove(selected, virtual)){
 
         var virtualDots = dots.filter(d => !d.selected);
@@ -101,14 +135,12 @@ function step(timeStamp){
         //voronoi if the player plays this move
         var virtualVoronoi = computeCells(virtualDots);
         drawCells(virtualVoronoi);
-    }else{
-        drawCells(voronoi);
     }
 
     findNearest();
 
     if(selected && virtual && state === STATE_MOVE && validMove(selected, virtual)){
-        ctx.strokeWidth=1;
+        ctx.lineWidth=1;
         ctx.strokeStyle = "black"
         ctx.beginPath();
         ctx.moveTo(selected.x,selected.y);
@@ -119,6 +151,7 @@ function step(timeStamp){
     if(selected && virtual && state === STATE_MOVE && validMove(selected, virtual)){
         drawDot(virtual);
     }
+//    logTime("end");
     window.requestAnimationFrame(step);
 }
 
@@ -155,26 +188,42 @@ function computeCells(dotsArray = dots){
 
 
 
-function drawCells(vDiag){
+function drawCells(vDiag, fill = true){
     const ctx = board.getContext("2d");
 
-    ctx.strokeWidth=0.5;
+    ctx.lineWidth=0.5;
 
-    vDiag.cells.forEach(cell => {
-       var shell = buildShell(cell);
+    //first villains, then heros, then villains but dashed
+    vDiag.cells.filter(c => c.site && c.site.team === TEAM_EVIL)
+        .forEach(cell => drawCell(ctx, cell, [], fill ));
 
-       ctx.fillStyle= bgColor(cell.site.team);
-       ctx.strokeStyle= mainColor(cell.site.team);
+    vDiag.cells.filter(c => c.site && c.site.team === TEAM_HERO)
+        .forEach(cell => drawCell(ctx, cell, [], fill));
 
-       ctx.beginPath();
-       ctx.moveTo(shell[0].x, shell[0].y)
-       for(let i = 1; i <shell.length; i++){
-          ctx.lineTo(shell[i].x, shell[i].y);
-       }
+    vDiag.cells.filter(c => c.site && c.site.team === TEAM_EVIL)
+        .forEach(cell => drawCell(ctx, cell, [15,15], fill));
+}
 
-       ctx.fill();
-       ctx.stroke();
-    });
+function drawCell(ctx, cell, lineDash = [], fill=true){
+
+    var shell = buildShell(cell);
+
+    ctx.fillStyle= bgColor(cell.site.team);
+
+    ctx.setLineDash(lineDash);
+    ctx.lineWidth = 3;
+    ctx.strokeStyle= mainColor(cell.site.team);
+
+    ctx.beginPath();
+    ctx.moveTo(shell[0].x, shell[0].y)
+    for(let i = 1; i <shell.length; i++){
+       ctx.lineTo(shell[i].x, shell[i].y);
+    }
+
+    if(fill)
+        ctx.fill();
+    ctx.stroke();
+    ctx.setLineDash([]);
 }
 
 function buildShell(cell){
@@ -190,10 +239,6 @@ function buildShell(cell){
     while(!samePoint(tail, head)){
         //find the remaining edge that share head
         var nextEdge = edges.filter(e => samePoint(head,e.va)||samePoint(head, e.vb))[0];
-
-        if(!nextEdge){
-            console.log("???");
-        }
 
 
         head = samePoint(head,nextEdge.va)?nextEdge.vb:nextEdge.va;
@@ -221,11 +266,11 @@ function drawDots(canvasId = 'board',dotsArray=dots){
 function drawDot(dot){
     const ctx = board.getContext("2d");
 
-    ctx.strokeWidth=1;
-    ctx.strokeStyle='#999';
+    ctx.lineWidth=2;
+    ctx.strokeStyle='#111';
     var radius = 5;
     if(dot.selected || (dot.nearest && state === STATE_SELECT_DOT)){
-        ctx.strokeWidth=12;
+        ctx.lineWidth=3;
         ctx.strokeStyle='#111';
         radius = 8
     }
@@ -249,20 +294,16 @@ function mainColor(team){
     return color(team, "1");
 }
 function bgColor(team){
-    return color(team, "0.5");
+    return color(team, "0.25");
 }
 function color(team, opacity){
     if(team === TEAM_EVIL){
-        return 'rgb(255,0,0,'+opacity+")";
+        return 'rgb(255,105,50,'+opacity+")";
     }else{
         return 'rgb(50,50,255,'+opacity+")";
     }
 }
 
 function dist(a,b){
-    if(!a || !b || !a.x || !a.y || !b.x || !b.y){
-        console.log("?");
-    }
-
-    return Math.sqrt(Math.pow(a.x-b.x,2)+Math.pow(a.y-b.y,2))
+        return Math.sqrt(Math.pow(a.x-b.x,2)+Math.pow(a.y-b.y,2))
 }
