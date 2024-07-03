@@ -74,22 +74,39 @@ main {
     color: var(--villain);
 }
 
-
+#cards {
+    display: flex;
+    justify-content: center;
+}
 
 .card{
 
     box-shadow: -3px 0px 0px 0px #00000063;
-    width: 90px;
-    height: 140px;
-    margin-left: -35px;
+    width: 70px;
+    height: 115px;
+
     border: var(--border) solid var(--ui);
     border-radius : 10px;
     display:inline-block;
 
     background: white;
+
+    transition: all 0.25s ease-in-out;
 }
 
-.card.current{
+.cardLabel{
+    position: relative;
+    margin: 0;
+    top: -1.35em;
+    font-size: 80%;
+    font-weight: bold;
+    text-shadow: 0 0 8px #ffffff, 0 0 1px #ffffff;
+}
+
+.futureCard{
+    margin-left: -10px;
+}
+.currentCard{
     margin-left: 2em;
 }
 
@@ -100,17 +117,61 @@ main {
     opacity: 0;
 }
 
+svg.hero polygon.adv{
+    fill: var(--villain-h-plain);
+}
+svg.hero polygon.mine{
+    fill: var(--hero-h-plain);
+}
 
-svg.hero{
-    background: var(--hero-h-plain);
+svg.villain polygon.adv{
+    fill: var(--hero-h-plain);
 }
-.hero circle{
-    fill: var(--hero);
+svg.villain polygon.mine{
+    fill: var(--villain-h-plain);
 }
 
-svg.villain{
-    background: var(--villain-h-plain);
+
+svg.hero line.adv{
+    stroke: var(--villain);
 }
-.villain circle{
-    fill: var(--villain);
+svg.hero line.mine{
+    stroke: var(--hero);
 }
+svg.villain line.adv{
+    stroke: var(--hero);
+}
+svg.villain line.mine{
+    stroke: var(--villain);
+}
+
+
+
+svg.hero .active.mine {
+    fill: var(--hero) ;
+}
+
+svg.hero .active.adv {
+    fill: var(--villain) ;
+}
+
+svg.villain .active.mine {
+    fill: var(--villain) ;
+}
+
+svg.villain .active.adv {
+    fill: var(--hero) ;
+}
+
+
+.turnV svg.hero {
+    margin-top: 1em;
+}
+
+
+
+.turnH svg.villain {
+    margin-top: 1em;
+}
+
+

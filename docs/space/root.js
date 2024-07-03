@@ -15,7 +15,7 @@ const STATE_IDLE = "idle"
 const STATE_SELECT_DOT = "select";
 const STATE_MOVE = "move";
 
-var turn = TEAM_HERO;
+var turn ;;
 
 
 var state = STATE_IDLE;
@@ -24,6 +24,8 @@ var dots = [];
 
 
 function start(){
+
+    switchTurn();
     initPos();
     startLoop();
 
@@ -74,11 +76,6 @@ function startLoop(){
 
 function step(timeStamp){
 
-//    var startTime = performance.now()
-//    var logTime = (step = "step") => {
-//        console.log(step+" (ms): ", performance.now()-startTime);
-//    }
-
     if(timeStamp < 90){
         window.setTimeout(()=>window.requestAnimationFrame(step), 90)
     }
@@ -101,7 +98,7 @@ function step(timeStamp){
         selected.selected = false;
 
         state = STATE_SELECT_DOT;
-        turn = (turn === TEAM_HERO ? TEAM_EVIL : TEAM_HERO);
+        switchTurn();
     }
     mouse.commit=false;
 
@@ -147,11 +144,11 @@ function step(timeStamp){
         ctx.lineTo(virtual.x,virtual.y);
         ctx.stroke();
     }
+
     drawDots();
     if(selected && virtual && state === STATE_MOVE && validMove(selected, virtual)){
         drawDot(virtual);
     }
-//    logTime("end");
     window.requestAnimationFrame(step);
 }
 
@@ -186,7 +183,19 @@ function computeCells(dotsArray = dots){
 
 
 
+function switchTurn(){
 
+    if((!turn) || (turn === TEAM_EVIL)){
+        turn = TEAM_HERO;
+        document.querySelector("body").classList.add("turnH");
+        document.querySelector("body").classList.remove("turnV");
+    }else{
+        turn = TEAM_EVIL;
+        document.querySelector("body").classList.add("turnV");
+        document.querySelector("body").classList.remove("turnH");
+    }
+
+}
 
 function drawCells(vDiag, fill = true){
     const ctx = board.getContext("2d");
