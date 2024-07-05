@@ -33,6 +33,63 @@
     <div id="cards">
         <!-- 70x115-->
         <div class="futureCard">
+            <svg class="card villain">
+                <!-- RELAX : place all points on their relaxation points -->
+                <!-- their area -->
+                <polygon class="neutral" points="-10,-10 -10,120 80,120 80,-10"   />
+                <!-- my area -->
+                <polygon class="neutral" points="-10,130 -10,70 90,55 90,130"   />
+
+                <!-- border-->
+                <line  x1="-10" y1="70" x2="90" y2="55" stroke="#EEE"  stroke-width="3" />
+                <line class="neutral" x1="-10" y1="70" x2="90" y2="55" stroke-dasharray="8 8"  stroke-width="3" />
+
+
+                <!--their move-->
+                <line    x1="47" y1="20" x2="14" y2="35"  stroke="black"  stroke-width="1" />
+                <!--my move-->
+                <line    x1="15" y1="90" x2="55" y2="95"  stroke="black"  stroke-width="1" />
+
+                <!-- one of their point -->
+                <circle  class="active adv" r="5" cx="47" cy="20" stroke="black" fill="#EEE" stroke-width="2" />
+                <circle  class="active adv" r="5" cx="14" cy="35" stroke="black" fill="#EEE" stroke-width="2" />
+                <!-- one on my points -->
+                <circle  class="active mine" r="5" cx="15" cy="90" stroke="black"  fill="#EEE" stroke-width="2" />
+                <circle  class="active mine" r="5" cx="55" cy="95" stroke="black"  fill="#EEE" stroke-width="2" />
+            </svg>
+            <p class="cardLabel">RELAX</p>
+        </div>
+        <div class="futureCard">
+            <svg class="card villain">
+                <!-- SPLIT : replace a dot by two dots around the relaxation point-->
+                <!-- their area -->
+                <polygon class="adv" points="-10,-10 -10,50 90,5 90,-10"   />
+                <!-- my area -->
+                <polygon class="mine" points="-10,130 -10,50 90,5 90,130"   />
+                <!-- their border-->
+                <line    class="adv" x1="-10" y1="50" x2="90" y2="5" stroke-width="3" />
+                <!-- my border-->
+                <line    class="mine" x1="-10" y1="50" x2="90" y2="5" stroke-dasharray="15 15"  stroke-width="3" />
+
+
+
+                <!--move-->
+                <line    x1="35" y1="80" x2="15" y2="60"  stroke="black"  stroke-width="1" />
+                <!--move-->
+                <line    x1="35" y1="80" x2="55" y2="100"  stroke="black"  stroke-width="1" />
+
+                <!-- one of their point -->
+                <circle  class="active adv" r="5" cx="47" cy="0"    stroke="black"  stroke-width="2" />
+                <!-- first split -->
+                <circle  class="active mine" r="5" cx="15" cy="60"    stroke="black"  stroke-width="2" />
+                <!-- second split -->
+                <circle  class="active mine" r="5" cx="55" cy="100"    stroke="black"  stroke-width="2" />
+                <!-- origin -->
+                <circle  class="active mine" r="8" cx="35" cy="80"    stroke="black"  stroke-width="3" />
+            </svg>
+            <p class="cardLabel">SPLIT</p>
+        </div>
+        <div class="futureCard">
             <svg id="leapV" class="card hero">
                 <!-- ATTACK : can GO in any place I own OR NOT-->
                 <!-- their area -->
@@ -120,12 +177,19 @@
         </div>
     </div>
 </footer>
+<p id="ia"></p>
 <p id="log"></p>
 </body>
+<script src="./constants.js" ></script>
 <script src="./root.js" ></script>
+<script src="./draw.js" ></script>
+<script src="./root.js" ></script>
+<script src="./game.js" ></script>
 <script src="./rhill-voronoi-core.min.js" ></script>
 
 <script>
     start();
+
+
     </script>
 </html>
