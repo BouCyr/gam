@@ -11,4 +11,4 @@ const STATE_MOVE = "move";
 
 const EPSILON = 0.00000000001;
 
-const MAX_IA_THINK_TIME_ms = 3000;
+const MAX_IA_THINK_TIME_ms = 300;

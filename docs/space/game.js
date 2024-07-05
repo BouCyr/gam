@@ -1,5 +1,16 @@
 
+/* IA */
 var iaWorker = new Worker("./iaworker.js");
+function launchIA(){
+    state=STATE_IDLE;
+
+
+    iaWorker.postMessage({
+        team:turn,
+        board:computeCells(dots),
+        dots:dots
+    });
+}
 iaWorker.onmessage = (e)=>{
 
     console.log("Received result from IA background thread")
@@ -8,20 +19,18 @@ iaWorker.onmessage = (e)=>{
     var text = move.type+" "+move.from.x+"/"+move.from.y+" "+move.to.x+"/"+move.to.y;
 
     document.getElementById("ia").innerHTML = text;
+
+    var moved = dots.filter(dot => sameDot(dot, move.from))[0];
+    moved.x = move.to.x;
+    moved.y = move.to.y;
+    state = STATE_SELECT_DOT;
+    switchTurn();
 }
 iaWorker.onerror = function (e) {
     console.log("Error ia compute", e);
 };
 
-function launchIA(team, board, dots){
-    iaWorker.postMessage({
-        team:team,
-        board:board,
-        dots:dots
-    });
-}
-
-
+/* GAME STATE */
 var board = document.getElementById("board");
 var mouse = {};
 
@@ -29,8 +38,7 @@ var turn ;
 var state = STATE_IDLE;
 var dots = [];
 
-const forbiddenVillain = forbiddenPattern(bgColor(TEAM_EVIL));
-const forbiddenHero = forbiddenPattern(bgColor(TEAM_HERO));
+
 
 function start(){
 

@@ -49,6 +49,43 @@ main {
     justify-content: center;
 }
 
+button{
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+
+    font-size: 400%;
+    border: var(--border) solid var(--ui);
+    border-radius: 10px;
+    background: inherit;
+    transition: all 0.2s;
+
+    padding: 1px;
+}
+.turnH button{
+    border-color: var(--hero);
+    background: var(--hero-h);
+}
+.turnV button{
+    border-color: var(--villain);
+    background: var(--villain-h);
+}
+
+.turnH button:hover{
+    background: inherit;
+}
+
+.turnH button:active{
+    background: var(--hero);
+}
+
+
+.turnV button:hover{
+    background: inherit;
+}
+
+.turnV #iaLaunch:active{
+    background: var(--villain);
+}
+
 
 .score {
     font-size:200%

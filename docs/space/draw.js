@@ -1,3 +1,7 @@
+/*PATTERNS*/
+const forbiddenVillain = forbiddenPattern(bgColor(TEAM_EVIL));
+const forbiddenHero = forbiddenPattern(bgColor(TEAM_HERO));
+
 
 function drawDots(canvasId = 'board',dotsArray=dots){
     dotsArray.forEach(dot=>drawDot(dot));
