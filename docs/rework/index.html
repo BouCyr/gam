@@ -181,15 +181,13 @@
 <p id="ia"></p>
 <p id="log"></p>
 </body>
-<script src="./constants.js" ></script>
-<script src="./root.js" ></script>
-<script src="./draw.js" ></script>
-<script src="./game.js" ></script>
-<script src="./ia.js" ></script>
-<script src="./rhill-voronoi-core.min.js" ></script>
 
-<script>
-    start();
+<script src="./rhill-voronoi-core.min.js" ></script>
+<script type="module" >
+
+import * as root from "./root.js";
+
+root.start();
 
 
 </script>

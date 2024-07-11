@@ -1,34 +1,4 @@
 
-/* IA */
-var iaWorker = new Worker("./iaworker.js");
-function launchIA(){
-    state=STATE_IDLE;
-
-
-    iaWorker.postMessage({
-        team:turn,
-        board:computeCells(dots),
-        dots:dots
-    });
-}
-iaWorker.onmessage = (e)=>{
-
-    console.log("Received result from IA background thread")
-    var move = e.data;
-
-    var text = move.type+" "+move.from.x+"/"+move.from.y+" "+move.to.x+"/"+move.to.y;
-
-    document.getElementById("ia").innerHTML = text;
-
-    var moved = dots.filter(dot => sameDot(dot, move.from))[0];
-    moved.x = move.to.x;
-    moved.y = move.to.y;
-    state = STATE_SELECT_DOT;
-    switchTurn();
-}
-iaWorker.onerror = function (e) {
-    console.log("Error ia compute", e);
-};
 
 /* GAME STATE */
 var board = document.getElementById("board");
@@ -38,6 +8,7 @@ var turn ;
 var state = STATE_IDLE;
 var dots = [];
 
+var dotsHistory = [];
 
 
 function start(){
@@ -53,16 +24,25 @@ function start(){
             mouse.y = e.clientY - rect.top;
     });
 
+    board.addEventListener('contextmenu', event => event.preventDefault())
+
     board.addEventListener("mouseup", (e) => {
 
-        if(state === STATE_SELECT_DOT ){
-            var nearest=dots.filter(d=>d.nearest)[0];
-            if(nearest){
-                state = STATE_MOVE;
-                nearest.selected = true;
+        if(e.button === 0){ //left click
+            if(state === STATE_SELECT_DOT ){
+                var nearest=dots.filter(d=>d.nearest)[0];
+                if(nearest){
+                    state = STATE_MOVE;
+                    nearest.selected = true;
+                }
+            }else if(state == STATE_MOVE){
+                mouse.commit = true;
             }
-        }else if(state == STATE_MOVE){
-            mouse.commit = true;
+        }else{ //right click. If a dot was selected, un select
+            if(state == STATE_MOVE){
+                dots.forEach(dot => dot.selected=false);
+                state = STATE_SELECT_DOT;
+            }
         }
 
     });
@@ -94,8 +74,11 @@ function step(timeStamp){
 
     var selected = dots.filter(d=>d.selected)[0];
 
+    var moved = false;
     // actual move
     if(mouse.commit && selected && virtual && state === STATE_MOVE && validMove(selected, virtual)){
+        moved = true;
+        historizeDots(dotsHistory,turn, dots);
         selected.x = virtual.x;
         selected.y= virtual.y;
         selected.selected = false;
@@ -108,6 +91,18 @@ function step(timeStamp){
     //the actual situation of the gameboard
     var voronoi = computeCells(dots);
 
+    //check if dots are removed
+    if(moved){
+
+
+        var turnResult = checkDots(dots, voronoi)
+        if(turnResult.update){
+            //some are removed
+            dots = turnResult.dots;
+            voronoi = computeCells(dots);
+        }
+    }
+
     //compute score
     var score = computeScore(voronoi);
 
@@ -117,12 +112,6 @@ function step(timeStamp){
 
     drawCells(voronoi);
 
-    //TODO remove
-//    if(state === STATE_MOVE){
-//
-//        choseNextMove(turn,voronoi, dots);
-//        choseNextMove(turn,    computeCells(dots), dots);
-//    }
 
     if(selected && virtual && state === STATE_MOVE && validMove(selected, virtual)){
 
@@ -148,7 +137,7 @@ function step(timeStamp){
         drawCells(voronoi);
     }
 
-    findNearest();
+   nearestToMouse();
 
     if(selected && virtual && state === STATE_MOVE && validMove(selected, virtual)){
         ctx.lineWidth=1;
@@ -170,16 +159,21 @@ function validMove(origin, dest, dotsArray = dots){
     return samePoint(origin, dots.sort((d,e) => dist(dest,d)-dist(dest,e) )[0]);
 }
 
-function findNearest(team=turn){
+function nearestToMouse(team=turn){
     document.getElementById("log").innerHTML = "(+"+mouse.x+","+mouse.y+")";
-
 
     dots.filter(d=>d.nearest).forEach(d=>{d.nearest=false;});
 
+
+    return findNearestTo(team, mouse);
+}
+
+function findNearestTo(team, pos){
+
     var nearest = dots
         .filter(d => d.team === team)
-        .filter(d => dist(d, mouse) < 40)
-        .sort((a,b)=>dist(mouse,a)-dist(mouse,b))[0];
+        .filter(d => dist(d, pos) < 40)
+        .sort((a,b)=>dist(pos,a)-dist(pos,b))[0];
     if(nearest)
         nearest.nearest=true;
 
@@ -189,7 +183,7 @@ function findNearest(team=turn){
 
 
 
-
+//TODO : update to tke the NEXT turn in param
 function switchTurn(){
 
     if((!turn) || (turn === TEAM_EVIL)){
@@ -203,6 +197,70 @@ function switchTurn(){
     }
 
 }
+
+function checkDots(dots, board){
+    var result = {
+        //will contain the dots AFTER the check (dots input ref will be updated as well)
+        dots:[],
+        //true if some dots were removed/added (?)
+        update:false
+        //TODO : game won ? or maybe when computing score ? maybe put score computing here ?
+    }
+
+    var workingDots = [];
+    dots.forEach(dot=>workingDots.push(dot));
+
+
+
+    //first all ENEMY dots ; this way if a move isolates both a 'mine' and a 'their', the 'thier' will be removed first (and the 'mine' may find a friendly neighbour back)
+    var them = turn===TEAM_EVIL?TEAM_HERO:TEAM_EVIL;
+    console.info("Checking if "+them+" has lonely dot ")
+    workingDots.filter(dot => dot.team !== turn).forEach(theirDot => {
+        if(hasNoFriendlyNeighbour(theirDot, board)){
+            result.update=true;
+            workingDots = removeDot(workingDots, theirDot);
+        }else{
+            result.dots.push(theirDot);
+        }
+    });
+    console.info("Checking if "+turn+" has lonely dot ")
+    workingDots.filter(dot => dot.team === turn).forEach(myDot=>{
+        if(hasNoFriendlyNeighbour(myDot, board)){
+            result.update=true;
+            workingDots = removeDot(workingDots, myDot);
+        }else{
+            result.dots.push(myDot);
+        }
+    });
+
+    return result;
+}
+
+function hasNoFriendlyNeighbour(dot, board){
+
+    return board
+        .cells.filter(cell => sameDot(dot, cell.site))[0] //find the cell corresponding to the dot
+            .halfedges //consider the edges
+            .map(he => (sameDot(he.site,he.edge.lSite))?he.edge.rSite:he.edge.lSite) // consider the opposing dot
+            .filter(n=>n) // remove null dot (ie edge with the outside of the board)
+            .every(n=>n.team !== dot.team) //check if every dots neighbouring the dot is for the outside team
+}
+
+
+function GO_BACK(){
+    var previousState = dotsHistory[dotsHistory.length -1 ];
+
+    dots = previousState.dots;
+    dotsHistory = dotsHistory.slice(0,dotsHistory.length-1)
+
+
+    switchTurn();
+    //TODO : find the current action and revert to correct state.
+    //right now we only have 'move'
+    state = STATE_SELECT_DOT;
+}
+
+
 
 
 

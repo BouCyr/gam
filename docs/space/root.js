@@ -1,17 +1,10 @@
 function initPos(dotsArray = dots){
 
-    const MARGIN = 40;
 
-    dotsArray.length = 0;
-
-    var yB = MARGIN;
-    var yR = SIZE - MARGIN;
-    for(let i = 0; i < DOTS; i++){
-        let x = MARGIN + i*((SIZE-2*MARGIN)/(DOTS-1));
-        dotsArray.push(new Dot(TEAM_HERO,x,yB));
-        dotsArray.push(new Dot(TEAM_EVIL,x,yR));
-    }
     return dotsArray;
+}
+
+function performMove(){
 }
 
 function computeCells(dotsArray = dots){
@@ -50,12 +43,10 @@ function buildShell(cell){
 
 
 function samePoint(pA, pB){
-
     return (Math.abs(pA.x - pB.x) < EPSILON) && (Math.abs(pA.y-pB.y)<EPSILON);
 }
 
 function sameDot(pA, pB){
-
     return samePoint(pA,pB);
 }
 
@@ -105,4 +96,22 @@ function Score(){
     score.villain.dots=0;
 
     return score;
+}
+function removeDot(dots, dot){
+    return dots.filter(d => !sameDot(d, dot));
+}
+
+function historizeDots(history, turn, dots /*, type*/){
+    var status = [];
+
+    var dotsCopy = dots
+     .map(dot => new Dot(dot.team, dot.x, dot.y))
+
+    var turnCopy = {
+        turn: turn,
+        dots: dotsCopy
+    }
+
+    history.push(turnCopy);
+
 }

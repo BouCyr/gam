@@ -1,4 +1,33 @@
+var iaWorker = new Worker("./iaworker.js");
+function launchIA(){
+    state=STATE_IDLE;
 
+
+    iaWorker.postMessage({
+        team:turn,
+        board:computeCells(dots),
+        dots:dots
+    });
+}
+iaWorker.onmessage = (e)=>{
+
+    console.log("Received result from IA background thread")
+    var move = e.data;
+    var text = move.type+" "+move.from.x+"/"+move.from.y+" "+move.to.x+"/"+move.to.y;
+
+    document.getElementById("ia").innerHTML = text;
+
+    historizeDots(dotsHistory,turn, dots);
+
+    var moved = dots.filter(dot => sameDot(dot, move.from))[0];
+    moved.x = move.to.x;
+    moved.y = move.to.y;
+    state = STATE_SELECT_DOT;
+    switchTurn();
+}
+iaWorker.onerror = function (e) {
+    console.log("Error ia compute", e);
+};
 
 
 

@@ -11,17 +11,18 @@ public class StartServer {
 
 
     public static final String HOST_NAME = "0.0.0.0";
+    public static final int PORT = 8241;
 
     public static void main(String... args){
         System.out.println("IN");
         HttpServer server = SimpleFileServer.createFileServer(
-                new InetSocketAddress(HOST_NAME, 8241),
-                Path.of("C:\\workspace\\gam\\docs\\space"),
+                new InetSocketAddress(HOST_NAME, PORT),
+                Path.of("C:\\workspace\\gam\\docs"),
                 SimpleFileServer.OutputLevel.INFO);
 
         System.out.println("init");
         server.start();
-        System.out.println("started");
+        System.out.println("started on "+PORT);
 
     }
 }
