@@ -1,0 +1,27 @@
+<svg>
+    <!-- RELAX : place all points on their relaxation points -->
+    <!-- their area -->
+    <polygon class="neutral" points="-10,-10 -10,120 80,120 80,-10"/>
+    <!-- my area -->
+    <polygon class="neutral" points="-10,130 -10,70 90,55 90,130"/>
+
+    <!-- border-->
+    <line stroke="#EEE" stroke-width="3" x1="-10" x2="90" y1="70" y2="55"/>
+    <line class="neutral" stroke-dasharray="8 8" stroke-width="3" x1="-10" x2="90" y1="70" y2="55"/>
+
+
+    <!--their move-->
+    <line stroke="black" stroke-width="1" x1="47" x2="14" y1="20" y2="35"/>
+    <!--my move-->
+    <line stroke="black" stroke-width="1" x1="15" x2="55" y1="90" y2="95"/>
+
+    <!-- one of their point -->
+    <circle class="active adv" cx="47" cy="20" fill="#EEE" r="5" stroke="black" stroke-width="2"/>
+    <circle class="active adv" cx="14" cy="35" fill="#EEE" r="5" stroke="black" stroke-width="2"/>
+    <!-- one on my points -->
+    <circle class="active mine" cx="15" cy="90" fill="#EEE" r="5" stroke="black" stroke-width="2"/>
+    <circle class="active mine" cx="55" cy="95" fill="#EEE" r="5" stroke="black" stroke-width="2"/>
+
+    <text class="cardLabel" dominant-baseline="text-bottom" text-anchor="middle" x="50%" y="110px">RELAX</text>
+
+</svg>

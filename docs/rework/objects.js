@@ -1,4 +1,5 @@
-import * as constants from "./constants.js";
+import * as C from "./constants.js";
+import * as F from "./functions.js";
 
 export function Dot(team, x,y, name){
     let dot = {};
@@ -7,25 +8,38 @@ export function Dot(team, x,y, name){
     dot.y=y;
 
     if(!name){
-        name = getName(team);
+        name = getDotName(team);
     }
 
     dot.name = name;
+
+    dot.copy = (nx,ny)=>{
+        return new Dot(dot.team,nx,ny,name);
+    }
+
     return dot;
 }
 
-var dotCountPerTea = new Map();
-dotCountPerTea.set(constants.TEAM_VILLAIN, 0);
-dotCountPerTea.set(constants.TEAM_HERO, 0);
+var dotCountPerTeam = new Map();
+dotCountPerTeam.set(C.TEAM_VILLAIN, 0);
+dotCountPerTeam.set(C.TEAM_HERO, 0);
 
-function getName(team){
-    const current = dotCountPerTea.get(team);
+function getDotName(team){
+    const current = dotCountPerTeam.get(team);
 
-    var catalog = team === constants.TEAM_HERO?constants.HERO_NAMES:constants.VILLAIN_NAMES;
+    var catalog = team === C.TEAM_HERO ? C.HERO_NAMES : C.VILLAIN_NAMES;
 
     var name = catalog[current%catalog.length];
-    dotCountPerTea.set(team, current+1);
+    dotCountPerTeam.set(team, current+1);
 
-    return name;
+    return name+dotCountPerTeam.get(team);
+}
 
+
+export function DeckCard( team, type, id = F.uniqueId()){
+    return {
+        team:team,
+        id:id,
+        type:type
+    }
 }

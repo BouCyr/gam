@@ -1,7 +1,27 @@
 /*PATTERNS*/
 const forbiddenVillain = forbiddenPattern(bgColor(TEAM_EVIL));
 const forbiddenHero = forbiddenPattern(bgColor(TEAM_HERO));
+function forbiddenPattern(color){
+    const offscreen = new OffscreenCanvas(20, 20);
+    const ctx =offscreen.getContext("2d");
 
+    ctx.lineWidth=3;
+    ctx.strokeStyle=color;
+
+//    for(let i = -10; i += 6; i <= 16){
+    let i = 0;
+    {
+        ctx.beginPath()
+        ctx.moveTo(-2,-2);
+        ctx.lineTo(22,22);
+        ctx.stroke();
+    }
+
+
+    const pattern = ctx.createPattern(offscreen, 'repeat');
+    return pattern;
+
+}
 
 function drawDots(canvasId = 'board',dotsArray=dots){
     dotsArray.forEach(dot=>drawDot(dot));
@@ -96,27 +116,7 @@ function oneCellAllowedBgFunction(allowed){
 }
 
 
-function forbiddenPattern(color){
-    const offscreen = new OffscreenCanvas(20, 20);
-    const ctx =offscreen.getContext("2d");
 
-    ctx.lineWidth=3;
-    ctx.strokeStyle=color;
-
-//    for(let i = -10; i += 6; i <= 16){
-    let i = 0;
-    {
-        ctx.beginPath()
-        ctx.moveTo(-2,-2);
-        ctx.lineTo(22,22);
-        ctx.stroke();
-    }
-
-
-    const pattern = ctx.createPattern(offscreen, 'repeat');
-    return pattern;
-
-}
 
 
 

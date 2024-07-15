@@ -1,12 +1,12 @@
-import * as state from "./state.js";
+import * as S from "./state.js";
 import * as UI from "./ui.js";
 import * as C from "./constants.js";
 
 
 export function start(){
 
-    if(!state.dots || state.dots.length === 0){
-        state.init();
+    if(!S.dots || S.dots.length === 0){
+        S.init();
     }
     UI.init();
 

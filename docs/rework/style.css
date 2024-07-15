@@ -117,6 +117,7 @@ button{
 }
 
 .card{
+    position:relative;
 
     box-shadow: -3px 0px 0px 0px #00000063;
     width: 70px;
@@ -129,24 +130,32 @@ button{
     background: white;
 
     transition: all 0.25s ease-in-out;
+    margin-left: -10px;
 }
 
 .cardLabel{
-    position: relative;
-    margin: 0;
-    top: -1.35em;
     font-size: 80%;
     font-weight: bold;
     text-shadow: 0 0 8px #ffffff, 0 0 1px #ffffff;
 }
 
-.futureCard{
-    margin-left: -10px;
+#cards{
+    margin-top: 2em;
 }
-.currentCard{
+
+.card:last-child
+{
     margin-left: 2em;
 }
 
+/*for PLAYED card*/
+.fade{
+ opacity: 0;   
+}
+.drawn{
+    opacity: 0;
+    left: -400px;
+}
 
 
 .card.prev{
@@ -207,14 +216,12 @@ svg.villain .active.adv {
 }
 
 
-.turnV svg.hero {
+.turnV svg.hero, .turnH svg.villain {
     margin-top: 1em;
 }
 
-
-
-.turnH svg.villain {
-    margin-top: 1em;
+.turnH svg.hero, .turnV svg.villain {
+    margin-top: -1em;
 }
 
 
