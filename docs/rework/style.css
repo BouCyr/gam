@@ -3,10 +3,14 @@
 :root {
     --hero:      rgba(50,50,255,1.0);
     --hero-h:    rgba(50,50,255,0.5);
+    --hero-hh:    rgba(50,50,255,0.25);
+    --hero-hhh:    rgba(50,50,255,0.125);
     --hero-h-plain: rgb(162,151,252);
 
     --villain:   rgba(248,93,51,1.0);
     --villain-h: rgba(248,93,51,0.5);
+    --villain-hh: rgba(248,93,51,0.25);
+    --villain-hhh: rgba(248,93,51,0.125);
     --villain-h-plain : rgb(252,183,171);
 
     --ui: #223;
@@ -225,3 +229,19 @@ svg.villain .active.adv {
 }
 
 
+/* ENDSTATE POPUP / DIALOG */
+
+.endState{
+    border: 3px solid var(--hero);
+    border-radius: 4px;
+    padding: 2em
+}
+
+.endState::backdrop{
+    background-color: var(--hero-hhh);
+    transition: backdrop-filter 0.75s;
+}
+.blured::backdrop{
+
+    backdrop-filter: saturate(3.0) blur(4px);
+}

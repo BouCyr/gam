@@ -18,6 +18,16 @@ export function computeScore(board){
         }
     });
 
+    //win ?
+
+    if(score.villain.border === 0 || (C.SIZE*4)===score.hero.border){ // rounding error sometimes ; never seen it on both side
+        score.hero.win = true;
+        console.info("HERO WINS");
+    } else if(score.hero.border === 0 || (C.SIZE*4)===score.villain.border){
+        score.villain.win = true;
+        console.info("HERO LOSES");
+    }
+
     //number of dots
     board.cells.map(cell=>cell.site).forEach(dot => dot.team===C.TEAM_VILLAIN?score.villain.dots++:score.hero.dots++);
 

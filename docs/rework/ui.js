@@ -23,6 +23,15 @@ export function init(){
         }
     });
 
+    //reset buttons rsv rsh
+    document.getElementById("rsv").addEventListener("click", (e)=>{ reset();});
+    document.getElementById("rsh").addEventListener("click", (e)=>{ reset();});
+}
+
+function reset(){
+    S.init();
+    /*UI.*/init();
+    [...document.querySelectorAll("dialog")].forEach(d => d.close());
 }
 
 export function update(){
@@ -77,6 +86,22 @@ function drawScore(){
 
     document.querySelector("#hero [score='borderPct']").innerHTML = Math.round((100*scores.hero.border)/(C.SIZE*4));
     document.querySelector("#villain [score='borderPct']").innerHTML = Math.round((100*scores.villain.border)/(C.SIZE*4));
+
+    //boolean logic could be simplified, but I want to keep things clear 
+    if(scores.hero.win){
+        endState(true);
+    }
+    if(scores.villain.win){
+        endState(false);
+    }
+}
+
+function endState(win){
+
+    var popup = win?"HEROWIN":"VILLAINWIN";
+
+    document.getElementById(popup).showModal();
+    document.getElementById(popup).classList.add("blured");
 }
 
 var first = true;

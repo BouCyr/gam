@@ -46,13 +46,18 @@ export function DeckCard( team, type, id = F.uniqueId()){
 
 
 export function Score(){
-    var score = {};
-    score.hero={};
-    score.villain={};
-    score.villain.border = 0;
-    score.hero.border = 0;
-    score.hero.dots=0;
-    score.villain.dots=0;
+    var score = {
+        hero: {
+            border:0,
+            dots:0,
+            win:false
+        },
+        villain: {
+            border:0,
+            dots:0,
+            win:false
+        }
+    };
 
     return score;
 }

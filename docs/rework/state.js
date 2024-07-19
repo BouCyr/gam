@@ -13,6 +13,8 @@ export function init(){
 
     const MARGIN = 40;
 
+    turn=C.TEAM_VILLAIN;
+
     let initialDots = [];
 
     var yB = MARGIN;
@@ -22,6 +24,8 @@ export function init(){
         initialDots.push(new O.Dot(C.TEAM_HERO,x,yB));
         initialDots.push(new O.Dot(C.TEAM_VILLAIN,x,yR));
     }
+
+    A.init();
 
     update(initialDots)
 }
