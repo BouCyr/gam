@@ -32,6 +32,7 @@ export function update(){
     if(isSwitchTurn()){
         drawTurn();
         drawDeck();
+        drawScore();
     }
 }
 
@@ -69,6 +70,13 @@ function move(mouseEvent){
     mouse.y = mouseEvent.clientY - rect.top;
 
     document.getElementById("log").innerText = mouse.x+"/"+mouse.y;
+}
+
+function drawScore(){
+    var scores = S.computeScore();
+
+    document.querySelector("#hero [score='borderPct']").innerHTML = Math.round((100*scores.hero.border)/(C.SIZE*4));
+    document.querySelector("#villain [score='borderPct']").innerHTML = Math.round((100*scores.villain.border)/(C.SIZE*4));
 }
 
 var first = true;

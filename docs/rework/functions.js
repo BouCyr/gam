@@ -1,4 +1,28 @@
 import * as C from "./constants.js";
+import * as O from "./objects.js";
+
+
+export function computeScore(board){
+
+
+    var score = new O.Score();
+
+    //border occupation
+    var outsideEdges = board.edges.filter(e => (!e.lSite)||(!e.rSite));
+    outsideEdges.forEach(e => {
+        var eScore = dist(e.va, e.vb);
+        if((e.lSite && e.lSite.team === C.TEAM_VILLAIN)){
+            score.villain.border += eScore;
+        }else{
+            score.hero.border += eScore;
+        }
+    });
+
+    //number of dots
+    board.cells.map(cell=>cell.site).forEach(dot => dot.team===C.TEAM_VILLAIN?score.villain.dots++:score.hero.dots++);
+
+    return score;
+}
 
 export function computeCells(dotsArray){
     var voronoi = new Voronoi();

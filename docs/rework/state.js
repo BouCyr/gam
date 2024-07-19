@@ -122,4 +122,9 @@ export function checkDeletion(){
     }
 }
 
+export function computeScore(){
+    //split between this and F.computeScore is useful for calculating move score for IA
+    return F.computeScore(board);
+}
+
 
