@@ -3,6 +3,9 @@ import * as MOVE from "./move.js";
 import * as LEAP from "./leap.js";
 
 
+export function init(){
+    nextAction=idle();
+}
 
 /**
 represents an expected user action - RN select a dot or select a position
@@ -27,8 +30,12 @@ export function Action(actionType, cancelFunction, filterFunction, selectFunctio
 
 function idle(){
     return new Action(
-        C.ACTION_NONE,
-        ()=>[],()=>{},()=>{},()=>{});
+        C.ACTION_NONE, //type
+        ()=>[], //nothing to cancel
+        ()=>{}, //no dtos nor celles can be selected
+        ()=>{}, //nothing will be done on select
+        ()=>{}, //no outcome (TODO : return initial board ?)
+    );
 }
 
 export var nextAction = idle();
