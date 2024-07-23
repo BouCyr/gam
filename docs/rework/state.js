@@ -39,6 +39,7 @@ export function update(newDots){
     var before = dots.length;
     dots = F.checkDeletion(turn, dots);
     var after  =dots.length;
+    
     if(before !== after){
         board = F.computeCells(dots);
     }
@@ -63,7 +64,9 @@ var deck = [
     new O.DeckCard(C.TEAM_HERO, C.STATE_MOVE),
     new O.DeckCard(C.TEAM_VILLAIN, C.STATE_MOVE),
     new O.DeckCard(C.TEAM_HERO, C.STATE_LEAP),
-    new O.DeckCard(C.TEAM_VILLAIN, C.STATE_LEAP)
+    new O.DeckCard(C.TEAM_VILLAIN, C.STATE_LEAP),
+    new O.DeckCard(C.TEAM_HERO, C.STATE_SPLIT),
+    new O.DeckCard(C.TEAM_VILLAIN, C.STATE_SPLIT)
 ];
 var current = null;
 export function currentCard(){

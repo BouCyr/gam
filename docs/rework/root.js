@@ -16,13 +16,6 @@ export function start(){
 
 }
 
-function update(delta){
-
-
-    UI.update();
-
-}
-
 function step(timestamp){
 
     if(timestamp < C.SKIP_FRAME){
@@ -32,4 +25,8 @@ function step(timestamp){
     update(timestamp);
 
     window.requestAnimationFrame(step);
+}
+
+function update(delta){
+    UI.update();
 }

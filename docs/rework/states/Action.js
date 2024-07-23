@@ -1,6 +1,7 @@
 import * as C from "../constants.js";
 import * as MOVE from "./move.js";
 import * as LEAP from "./leap.js";
+import * as SPLIT from "./split.js";
 
 
 export function init(){
@@ -53,6 +54,10 @@ export function initAction(team, key){
         nextAction = MOVE.nextAction;
     }
     if(key === C.STATE_LEAP){
+        LEAP.init(team);
+        nextAction = LEAP.nextAction;
+    }
+    if(key === C.STATE_SPLIT){
         LEAP.init(team);
         nextAction = LEAP.nextAction;
     }

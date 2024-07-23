@@ -7,9 +7,10 @@ import * as SVG from "./cards/SVGs.js";
 
 export var mouse = {x:0, y:0};
 
+/*
+setup UI
+*/
 export function init(){
-
-
 
     let canvas = document.getElementById("board");
     canvas.addEventListener("mousemove", (e) => move(e));
