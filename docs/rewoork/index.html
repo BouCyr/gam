@@ -1,0 +1,75 @@
+<html lang="fr">
+<head>
+    <link href="./style.css" rel="stylesheet">
+</head>
+<body>
+<header>
+    <h1><span id="titleContent">Voronoi battle</span></h1>
+</header>
+<main>
+    <aside id="hero">
+        <h3>Good guys</h3>
+
+        <div class="scoreHolder">
+            <h4>Border</h4>
+            <p class="percent"><span class="score" score="borderPct"></span></p>
+        </div>
+    </aside>
+
+    <div id="canvasHolder">
+        <canvas height="600" id="board" width="600"></canvas>
+    </div>
+    <aside id="villain">
+        <h3>Bad guys</h3>
+
+        <div class="scoreHolder">
+            <h4>Border</h4>
+            <p class="percent"><span class="score" score="borderPct"></span></p>
+        </div>
+    </aside>
+
+</main>
+<footer>
+    <div id="cards">
+
+    </div>
+</footer>
+<p style="text-align: center;   ">
+    <button id="iaLaunch" onclick="launchIA();">&#x1F4BB;</button>
+</p>
+<p id="ia"></p>
+<p id="log"></p>
+<ol id="deck">
+
+</ol>
+<dialog class="endState" id="HEROWIN">
+    <h1>HERO WINS</h1>
+    <p>congrats !</p>
+    <p style="text-align: center;   ">
+        <button id="rsh">&circlearrowleft;</button>
+    </p>
+</dialog>
+<dialog class="endState" id="VILLAINWIN">
+    <h1>VILLAIN WINS</h1>
+    <p>Sorry...</p>
+    <p style="text-align: center;   ">
+        <button id="rsv">&circlearrowleft;</button>
+    </p>
+</dialog>
+</body>
+
+<script src="./rhill-voronoi-core.min.js"></script>
+<script type="module">
+
+import * as root from "./alpha.js";
+
+function init(){
+    console.info("START !!")
+    root.start();
+}
+
+init();
+
+
+</script>
+</html>
