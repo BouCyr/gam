@@ -71,9 +71,7 @@ function drawAction(msSinceStart){
 
   B.drawCells(board.cells);
   
-  //check if some dots were removed because they were surrounded
-  var removed = findRemovedDots(S.dots, dotsIfOutcome);
-  B.crossPoints(removed);
+
 
   //moves
   if(outcomeIfCommited.moves && outcomeIfCommited.moves.length >0){
@@ -92,6 +90,10 @@ function drawAction(msSinceStart){
         B.drawDot(selectedDot, true);
     });
   }
+
+  //check if some dots were removed because they were surrounded
+  var removed = findRemovedDots(S.dots, dotsIfOutcome);
+  B.crossPoints(removed);
 
 }
 

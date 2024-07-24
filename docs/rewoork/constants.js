@@ -36,6 +36,7 @@ export const STEAP_SELECT_DEST = "select_loc";
 export const CARD_MOVE = "move";
 export const CARD_LEAP = "leap";
 export const CARD_SPLIT = "split";
+export const CARD_SWITCH = "switch";
 export const CARD_RELAX = "relax";
 export const CARD_ATTACK = "attack";
 export const CARD_IDLE = "idle_key";

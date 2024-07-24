@@ -1,7 +1,10 @@
 import * as C from "./constants.js";
 import * as S from "./state.js";
+
 import * as MOVE from "./plays/move.js";
 import * as SPLIT from "./plays/split.js";
+import * as SWITCH from "./plays/switch.js";
+
 /**
  * handles UI for the current action
  */
@@ -46,6 +49,7 @@ function fromCard(deckCard){
         case C.CARD_LEAP    : MOVE.initLeap(deckCard.team);   return MOVE;
         case C.CARD_ATTACK  : MOVE.initAttack(deckCard.team); return MOVE;
         case C.CARD_SPLIT   : SPLIT.init(deckCard.team);      return SPLIT;
+        case C.CARD_SWITCH  : SWITCH.init(deckCard.team);     return SWITCH;
                 default:
     }
 }

@@ -174,3 +174,36 @@ export function uniqueId(){
     //in case two ids are requested at the same time, increment by a random number ; should be safe enough ?
     return (currentId+=increment);
 }
+
+
+/**
+ * Return the neighbours of a dot
+ * @param {Dot} dot 
+ * @param {Dot[]} dots 
+ * @returns the neighbours of dot
+ */
+export function neighbours(dots, dot){
+    var voronoi = computeCells(dots);
+    try{
+    var dotCell = voronoi.cells.filter(cell => sameDot(dot, cell.site))[0];
+    }catch{
+        console.log("wat?");
+    }
+    return dotCell.halfedges.map(h=>h.edge)
+        .filter(edge=>otherSide(dot, edge)) // ignore edges with the outside
+        .map(edge=>otherSide(dot, edge));
+}
+
+export function areNeighbours(dots, dotA, dotB){
+    return neighbours(dots, dotA).filter(n => samePoint(n, dotB)).length>0;
+}
+
+/**
+ *  may return null if the edge is on the outside/buonds
+  */
+export function otherSide(dot, edge){
+    if(!edge.lSite || !edge.rSite)
+        return null;
+
+    return samePoint(dot, edge.lSite)?edge.rSite:edge.lSite;
+}

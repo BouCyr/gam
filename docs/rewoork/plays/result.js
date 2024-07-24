@@ -25,7 +25,7 @@ export function Move( dot, dest){
     return {
         origin: {
             x: dot.x,
-            y:dot.y
+            y: dot.y
         },
         dot: dot.move(dest.x, dest.y)
     }

@@ -32,6 +32,8 @@ export function reset(){
         new O.DeckCard(C.TEAM_VILLAIN, C.CARD_MOVE),
         new O.DeckCard(C.TEAM_HERO, C.CARD_LEAP),
         new O.DeckCard(C.TEAM_VILLAIN, C.CARD_LEAP),
+        new O.DeckCard(C.TEAM_HERO, C.CARD_SWITCH),
+        new O.DeckCard(C.TEAM_VILLAIN, C.CARD_SWITCH),        
         new O.DeckCard(C.TEAM_HERO, C.CARD_SPLIT),
         new O.DeckCard(C.TEAM_VILLAIN, C.CARD_SPLIT)
     ];
