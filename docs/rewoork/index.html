@@ -35,7 +35,7 @@
     </div>
 </footer>
 <p style="text-align: center;   ">
-    <button id="iaLaunch" onclick="launchIA();">&#x1F4BB;</button>
+    <button id="iaLaunch">&#x1F4BB;</button>
 </p>
 <p id="ia"></p>
 <p id="log"></p>
@@ -69,6 +69,13 @@ function init(){
 }
 
 init();
+
+document.getElementById("iaLaunch").addEventListener("click", (e)=>{
+    console.log("Launching IA");
+    const worker = new Worker('ia.js', { type: 'module' });
+    worker.postMessage("PING");
+
+});
 
 
 </script>

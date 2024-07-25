@@ -207,3 +207,10 @@ export function otherSide(dot, edge){
 
     return samePoint(dot, edge.lSite)?edge.rSite:edge.lSite;
 }
+
+//in rad -Pi -> Pi
+export function calcAngle(a, b) {
+    var dx = b.x - a.x;	
+    var dy = b.y - a.y; 
+    return Math.atan2(dy, dx) ;
+}

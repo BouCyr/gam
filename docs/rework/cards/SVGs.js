@@ -18,7 +18,7 @@ export function getSvgForAction(card){
 
 function wat(teamClass, card){
 return  `
-<svg style="width: 75px; height:110px;" >
+<svg clas=="card ${teamClass}" id="card${card.id}"> >
     <text class="cardLabel" dominant-baseline="text-bottom" text-anchor="middle" x="50%" y="50%">?${card.type}?</text>
 </svg>
 `;

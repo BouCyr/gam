@@ -5,7 +5,7 @@ import * as B from "./drawBoard.js";
 import * as F from "./functions.js";
 import * as I from './input.js';
 import * as P from './play.js';
-//import * as SVG from "./cards/SVGs.js";
+import * as SVG from "./cards/SVGs.js";
 
 export function reset(){
     [...document.querySelectorAll("dialog")].forEach(d => d.close());
@@ -15,17 +15,54 @@ export function reset(){
 //update UI
 export function update(msSinceStart){
     drawBoard();
-    drawScore();
     drawAction(msSinceStart);
 
+    if(S.isFirstDrawSinceNewTurn()) {
+      console.info("New turn drawn");
+
+
+      drawCurrentTeam();
+      drawScore();
+      drawDeck();
+    }
     
 }
 
+function drawCurrentTeam()
+{
+  if(S.team === C.TEAM_HERO){
+    document.querySelector("body").classList.add("turnH");
+    document.querySelector("body").classList.remove("turnV");
+  }else{
+    document.querySelector("body").classList.add("turnV");
+    document.querySelector("body").classList.remove("turnH");
+  }
+}
+
+function drawDeck(){
+
+  var deckIds = [...S.nextCards.map(card => card.id)];
+  deckIds.unshift(S.currentCard.id);
+  //TODO : add any card in (nextCards+currentCard) not drawn, remove any card drawn not in (nextCards+currentCard)
+
+  document.getElementById("cards").innerHTML="";
+  drawCard(S.currentCard);
+  S.nextCards.forEach(drawCard);
+  
+}
+function drawCard(deckCard){
+
+
+
+  var svg = document.createElement("svg");
+  document.getElementById("cards").prepend(svg);
+  svg.outerHTML = SVG.getSvg(deckCard);
+}
 
 
 function drawScore(){
-    var scores = S.score();
 
+    var scores = S.score();
     document.querySelector("#hero [score='borderPct']").innerHTML = Math.round((100*scores.hero.border)/(C.SIZE*4));
     document.querySelector("#villain [score='borderPct']").innerHTML = Math.round((100*scores.villain.border)/(C.SIZE*4));
 
@@ -75,9 +112,18 @@ function drawAction(msSinceStart){
 
   //moves
   if(outcomeIfCommited.moves && outcomeIfCommited.moves.length >0){
-    outcomeIfCommited.moves.forEach(move => {
-        B.drawPath(move.origin, move.dot);
-    });
+
+    var moves = outcomeIfCommited.moves;
+    //are we draing a switch ?
+    if(moves.length === 2 && F.samePoint(moves[0].origin, moves[1].dot) && F.samePoint(moves[1].origin, moves[0].dot)){
+      //screwy, and won't work if the action must perform more thant one switch
+      //RN i don't envision any cards thath would do this, and the fallback is the regular path drawing (which would be bad, but would work)
+        B.drawSwitch(moves[0].origin, moves[0].dot, msSinceStart);
+    }else{
+      moves.forEach(move => {
+        B.drawPath(move.origin, move.dot, msSinceStart);
+      });
+    }
   }
 
   //selectable dot

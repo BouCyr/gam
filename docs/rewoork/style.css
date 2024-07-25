@@ -129,12 +129,22 @@ button{
 
     border: var(--border) solid var(--ui);
     border-radius : 10px;
+
+    outline: var(--border) solid magenta;
+    outline-offset:  calc(-2 * var(--border));
+
     display:inline-block;
 
     background: white;
 
     transition: all 0.25s ease-in-out;
     margin-left: -10px;
+}
+.card.hero{
+    outline-color: var(--hero-h);
+}
+.card.villain{
+    outline-color: var(--villain-h);
 }
 
 .cardLabel{
@@ -218,6 +228,8 @@ svg.villain .active.mine {
 svg.villain .active.adv {
     fill: var(--hero) ;
 }
+
+
 
 
 .turnV svg.hero, .turnH svg.villain {

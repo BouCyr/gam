@@ -10,6 +10,8 @@ export var nextCards = [];
 export var currentCard = null;
 
 
+
+
 /*
 * (re) init the board to its initial position
 */
@@ -60,7 +62,16 @@ export function startNewTurn(newDots =dots){
 
     var deck = nextCards.reduce((acc, it)=>acc+", "+it.type+" by "+it.team, "");
     console.info("deck is : "+deck);
-    
+    turnNotDrawn = true;
+}
+
+// Allow UI to know if a turn has just begun (so deck and score are not redrawn at each frames, only on turn switch)
+let turnNotDrawn = true;
+export function isFirstDrawSinceNewTurn(){
+    let newTurn = turnNotDrawn;
+    turnNotDrawn=false;
+    return newTurn;
+
 }
 
 export function score(){
