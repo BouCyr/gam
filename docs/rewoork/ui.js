@@ -23,14 +23,14 @@ export function update(msSinceStart){
 
       drawCurrentTeam();
       drawScore();
-      drawDeck();
+      drawDecks();
     }
     
 }
 
 function drawCurrentTeam()
 {
-  if(S.team === C.TEAM_HERO){
+  if(S.turn === C.TEAM_HERO){
     document.querySelector("body").classList.add("turnH");
     document.querySelector("body").classList.remove("turnV");
   }else{
@@ -39,32 +39,40 @@ function drawCurrentTeam()
   }
 }
 
-function drawDeck(){
-
-  var deckIds = [...S.nextCards.map(card => card.id)];
-  deckIds.unshift(S.currentCard.id);
-  //TODO : add any card in (nextCards+currentCard) not drawn, remove any card drawn not in (nextCards+currentCard)
-
-  document.getElementById("cards").innerHTML="";
-  drawCard(S.currentCard);
-  S.nextCards.forEach(drawCard);
-  
+function drawDecks(){
+  drawDeck(C.TEAM_HERO);
+  drawDeck(C.TEAM_VILLAIN);
 }
-function drawCard(deckCard){
 
+function drawDeck(team){
 
+  document.querySelector("#"+team+" .deck").innerHTML = "";
+  S.deck(team)
+    .toReversed()
+    .forEach(card => drawCard(team, card));
+
+  if(S.currentCard.team === team){
+    drawCard(team, S.currentCard);
+  }
+
+}
+function drawCard(team, deckCard){
+
+  var container = document.querySelector("#"+team+" .deck");
 
   var svg = document.createElement("svg");
-  document.getElementById("cards").prepend(svg);
+
+  container.append(svg);
   svg.outerHTML = SVG.getSvg(deckCard);
+
 }
 
 
 function drawScore(){
 
     var scores = S.score();
-    document.querySelector("#hero [score='borderPct']").innerHTML = Math.round((100*scores.hero.border)/(C.SIZE*4));
-    document.querySelector("#villain [score='borderPct']").innerHTML = Math.round((100*scores.villain.border)/(C.SIZE*4));
+    document.querySelector("#heros [score='borderPct']").innerHTML = Math.round((100*scores.hero.border)/(C.SIZE*4));
+    document.querySelector("#villains [score='borderPct']").innerHTML = Math.round((100*scores.villain.border)/(C.SIZE*4));
 
     //boolean logic could be simplified, but I want to keep things clear 
     if(scores.hero.win){

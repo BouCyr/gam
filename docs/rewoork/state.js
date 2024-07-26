@@ -6,11 +6,20 @@ import * as P from "./play.js";
 export var turn = C.TEAM_NOONE;
 export var dots = [];
 export var board;
-export var nextCards = [];
 export var currentCard = null;
 
 
 
+const decks = new Map();
+export function deck(team){
+    if(!decks.get(team))
+        decks.set(team, []);
+    return decks.get(team);
+}
+
+function addCardToDeck(deckTeam, cardType){
+    deck(deckTeam).push(new O.DeckCard(deckTeam, cardType));
+}
 
 /*
 * (re) init the board to its initial position
@@ -29,16 +38,18 @@ export function reset(){
         initialDots.push(new O.Dot(C.TEAM_VILLAIN,x,yR));
     }
 
-    nextCards = [
-        new O.DeckCard(C.TEAM_HERO, C.CARD_MOVE),
-        new O.DeckCard(C.TEAM_VILLAIN, C.CARD_MOVE),
-        new O.DeckCard(C.TEAM_HERO, C.CARD_LEAP),
-        new O.DeckCard(C.TEAM_VILLAIN, C.CARD_LEAP),
-        new O.DeckCard(C.TEAM_HERO, C.CARD_SWITCH),
-        new O.DeckCard(C.TEAM_VILLAIN, C.CARD_SWITCH),        
-        new O.DeckCard(C.TEAM_HERO, C.CARD_SPLIT),
-        new O.DeckCard(C.TEAM_VILLAIN, C.CARD_SPLIT)
-    ];
+
+    addCardToDeck(C.TEAM_HERO, C.CARD_MOVE);
+    addCardToDeck(C.TEAM_HERO, C.CARD_ATTACK);
+    addCardToDeck(C.TEAM_HERO, C.CARD_LEAP);
+    addCardToDeck(C.TEAM_HERO, C.CARD_SWITCH);
+    addCardToDeck(C.TEAM_HERO, C.CARD_SPLIT);
+
+    addCardToDeck(C.TEAM_VILLAIN, C.CARD_MOVE);
+    addCardToDeck(C.TEAM_VILLAIN, C.CARD_ATTACK);
+    addCardToDeck(C.TEAM_VILLAIN, C.CARD_LEAP);
+    addCardToDeck(C.TEAM_VILLAIN, C.CARD_SWITCH);
+    addCardToDeck(C.TEAM_VILLAIN, C.CARD_SPLIT);
 
     turn = C.TEAM_NOONE;
 
@@ -55,13 +66,12 @@ export function startNewTurn(newDots =dots){
 
     turn = newTeam;
     //draw the next card...
-    currentCard = nextCards.shift();
+    currentCard = deck(newTeam).shift();
     P.init(currentCard);
     //... and add a copy of it back into the queue  
-    nextCards.push(new O.DeckCard(currentCard.team, currentCard.type));
+    deck(newTeam).push(new O.DeckCard(currentCard.team, currentCard.type));
 
-    var deck = nextCards.reduce((acc, it)=>acc+", "+it.type+" by "+it.team, "");
-    console.info("deck is : "+deck);
+
     turnNotDrawn = true;
 }
 
