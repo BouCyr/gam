@@ -16,6 +16,7 @@ var firstDot = null;
 var secondDot = null;
 
 
+
 export function cancel(){
     if(secondDot){
         secondDot = null;
@@ -24,11 +25,15 @@ export function cancel(){
         firstDot = null;
         console.info("Cancelling firstDot");
     }
-
 }
 
-export function commitInput(dots, input){
-    var output = sampleInput(dots, input);
+export function reset(){
+    firstDot=null;
+    secondDot=null;
+}
+
+export function select(dots, input){
+    var output = whatIf(dots, input);
     if(output.valid){
         if(!firstDot){
             firstDot = output.selected[0];
@@ -41,7 +46,7 @@ export function commitInput(dots, input){
 
 }
 
-export function sampleInput(dots, input){
+export function whatIf(dots, input){
     var nearestDot = F.dotInRange(dots, input);
         
     if(!firstDot){

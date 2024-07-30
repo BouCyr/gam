@@ -15,12 +15,6 @@ export function Dot(team, x,y, id= F.uniqueId()){
     dot.y=y;
     dot.id=id;
 
-    
-
-    dot.move = (nx,ny)=>{
-        return new Dot(dot.team,nx,ny,dot.id);
-    }
-
     return dot;
 }
 

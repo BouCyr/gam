@@ -5,21 +5,33 @@ import * as P from "./play.js";
 
 export var turn = C.TEAM_NOONE;
 export var dots = [];
-export var board;
 export var currentCard = null;
+export const decks = new Map();
 
 
-
-const decks = new Map();
 export function deck(team){
     if(!decks.get(team))
         decks.set(team, []);
     return decks.get(team);
 }
 
-function addCardToDeck(deckTeam, cardType){
-    deck(deckTeam).push(new O.DeckCard(deckTeam, cardType));
+
+/**
+ * Init the (brand new) state to a pristine state to allow IA computation
+ * 
+ * @param {O.DeckCard} iaCurrentCard 
+ * @param {O.Dot[]} allDots 
+ * @param {Map(tea, O.DeckCard[])} allDecks 
+ */
+export function iaInit(iaCurrentCard, allDots, allDecks){
+    turn = iaCurrentCard.team;
+    currentCard = iaCurrentCard;
+    dots = allDots;
+    decks.set(C.TEAM_HERO, allDecks.get(C.TEAM_HERO));
+    decks.set(C.TEAM_VILLAIN, allDecks.get(C.TEAM_VILLAIN));
+    initTurn();
 }
+
 
 /*
 * (re) init the board to its initial position
@@ -39,16 +51,17 @@ export function reset(){
     }
 
 
+    
+    addCardToDeck(C.TEAM_HERO, C.CARD_SWITCH);
     addCardToDeck(C.TEAM_HERO, C.CARD_MOVE);
     addCardToDeck(C.TEAM_HERO, C.CARD_ATTACK);
     addCardToDeck(C.TEAM_HERO, C.CARD_LEAP);
-    addCardToDeck(C.TEAM_HERO, C.CARD_SWITCH);
     addCardToDeck(C.TEAM_HERO, C.CARD_SPLIT);
 
+    addCardToDeck(C.TEAM_VILLAIN, C.CARD_SWITCH);
     addCardToDeck(C.TEAM_VILLAIN, C.CARD_MOVE);
     addCardToDeck(C.TEAM_VILLAIN, C.CARD_ATTACK);
     addCardToDeck(C.TEAM_VILLAIN, C.CARD_LEAP);
-    addCardToDeck(C.TEAM_VILLAIN, C.CARD_SWITCH);
     addCardToDeck(C.TEAM_VILLAIN, C.CARD_SPLIT);
 
     turn = C.TEAM_NOONE;
@@ -56,21 +69,32 @@ export function reset(){
     //start the first turn
     startNewTurn(initialDots)
 }
+function addCardToDeck(deckTeam, cardType){
+    deck(deckTeam).push(new O.DeckCard(deckTeam, cardType));
+}
 
-export function startNewTurn(newDots =dots){
+export function startNewTurn(newDots = dots){
     
     dots = newDots;
-    board = F.computeCells(dots);
     
     let newTeam = turn !== C.TEAM_HERO ? C.TEAM_HERO : C.TEAM_VILLAIN;
 
     turn = newTeam;
     //draw the next card...
     currentCard = deck(newTeam).shift();
-    P.init(currentCard);
+    
     //... and add a copy of it back into the queue  
     deck(newTeam).push(new O.DeckCard(currentCard.team, currentCard.type));
-
+    initTurn();
+}
+/**
+ * init the turn once the state is set
+ * 
+ * May be called by 'startNewturn) (main loop) or by iaInit(on stete clone for ia computation)
+ */
+export function initTurn(){
+ 
+    P.init(currentCard);
 
     turnNotDrawn = true;
 }
@@ -86,7 +110,7 @@ export function isFirstDrawSinceNewTurn(){
 
 export function score(){
     //split between this and F.computeScore is useful for calculating move score for IA
-    return F.computeScore(board);
+    return F.computeScore(dots);
 }
 
 export function onActionDone(outcome){

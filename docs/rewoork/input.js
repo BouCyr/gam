@@ -1,4 +1,5 @@
 import * as P from "./play.js";
+import * as S from "./state.js";
 
 /**
  * Receiving and dispatching user input
@@ -32,11 +33,13 @@ export function init(){
     //reset buttons rsv rsh
     document.getElementById("rsv").addEventListener("click", (e)=>{ reset();});
     document.getElementById("rsh").addEventListener("click", (e)=>{ reset();});
+
+    document.getElementById("iaLaunch").addEventListener("click", (e)=>{ iaLaunch(); });
 }
 
 function leftClick(e){
     
-    P.click(mouse);
+    P.select(mouse);
 }
 
 function rightClick(e){
@@ -49,4 +52,18 @@ function move(mouseEvent){
 
     mouse.x = mouseEvent.clientX - rect.left;
     mouse.y = mouseEvent.clientY - rect.top;
+}
+
+var cacheBusting = Math.random();//worker script is not reloaded 
+function iaLaunch(){
+
+    console.log("Launching IA");
+    const worker = new Worker('./iaWorker.js?'+cacheBusting, { type: 'module' });
+    worker.postMessage({
+        dots: S.dots,
+        //turn: S.turn, listed in currentcard
+        card: S.currentCard,
+        decks : S.decks
+    });
+
 }

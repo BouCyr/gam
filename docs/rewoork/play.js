@@ -24,15 +24,14 @@ export function init(deckCard){
     console.log("Action initialized");
 }
 
-export function actionStatus(mouse){
-    var outcome = action.sampleInput(S.dots, mouse);
-    //TODO : surrounded dots
-
+export function whatIfISelect(mouse){
+    var outcome = action.whatIf(S.dots, mouse);
+    
     return outcome;
 }
-export function click(mouse){
-    var outcome =  action.commitInput(S.dots, mouse);
-    //TODO : surrounded dots
+export function select(mouse){
+    var outcome =  action.select(S.dots, mouse);
+    
     if(outcome.done == true){
         S.onActionDone(outcome);
     }
@@ -41,6 +40,12 @@ export function click(mouse){
 }
 export function cancel(mouse){
     return action.cancel();
+}
+/** 
+ * Used by IA to reset before trying another input
+ */
+export function reset(){
+    return action.reset();
 }
 
 function fromCard(deckCard){

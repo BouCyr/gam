@@ -94,18 +94,19 @@ function endState(win){
 
 
 function drawBoard(){
-    B.drawAll(S.board);
+    B.drawAll(F.computeCells(S.dots));
 }
 
 function drawAction(msSinceStart){
   var mousePos = I.mouse;
   
   // this is an outcome
-  var outcomeIfCommited = P.actionStatus(mousePos);
+  var outcomeIfCommited = P.whatIfISelect(mousePos);
 
   // fobidden cells
   if(outcomeIfCommited.cellFilter){
-    var forbidden = S.board.cells.filter(cell => !outcomeIfCommited.cellFilter(cell.site));
+    var board = F.computeCells(S.dots);
+    var forbidden = board.cells.filter(cell => !outcomeIfCommited.cellFilter(cell.site));
     B.drawCells(forbidden, true);
   }
 

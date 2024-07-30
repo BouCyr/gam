@@ -64,7 +64,6 @@
 </dialog>
 </body>
 
-<script src="./rhill-voronoi-core.min.js"></script>
 <script type="module">
 
 import * as root from "./alpha.js";
@@ -76,12 +75,7 @@ function init(){
 
 init();
 
-document.getElementById("iaLaunch").addEventListener("click", (e)=>{
-    console.log("Launching IA");
-    const worker = new Worker('ia.js', { type: 'module' });
-    worker.postMessage("PING");
 
-});
 
 
 </script>

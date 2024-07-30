@@ -5,6 +5,7 @@ import * as R from "./result.js";
 
 export function initMove(actionTeam){
     console.info("Starting a move");
+
     subType = C.CARD_MOVE;
     
     team = actionTeam;
@@ -12,6 +13,7 @@ export function initMove(actionTeam){
     dest = null;
 }
 export function initLeap(actionTeam){
+
     console.info("Starting a leap");
     subType = C.CARD_LEAP;
     team = actionTeam;
@@ -19,6 +21,7 @@ export function initLeap(actionTeam){
     dest = null;
 }
 export function initAttack(actionTeam){
+
     console.info("Starting an attack");
     subType = C.CARD_ATTACK;
     team = actionTeam;
@@ -26,14 +29,18 @@ export function initAttack(actionTeam){
     dest = null;
 }
 
-
-
-
 var subType = C.CARD_MOVE;
 
 var team;
 var selectedDot = null;
 var dest = null;
+
+
+
+export function reset(){
+    dest=null;
+    selectedDot=null;
+}
 
 
 export function cancel(){
@@ -47,8 +54,8 @@ export function cancel(){
 
 }
 
-export function commitInput(dots, input){
-    var output = sampleInput(dots, input);
+export function select(dots, input){
+    var output = whatIf(dots, input);
     if(output.valid){
         if(!selectedDot){
             selectedDot = output.selected[0];
@@ -63,7 +70,7 @@ export function commitInput(dots, input){
 
 }
 
-export function sampleInput(dots, input){
+export function whatIf(dots, input){
 
     if(!selectedDot){
         //we are currently selecting the moved dot

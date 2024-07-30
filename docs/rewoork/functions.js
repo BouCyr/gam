@@ -1,5 +1,6 @@
 import * as C from "./constants.js";
 import * as O from "./objects.js";
+import * as V from './rhill-voronoi-core-module.js';
 
 
 export function inBounds(point){
@@ -8,9 +9,10 @@ export function inBounds(point){
 }
 
 
-export function computeScore(board){
+export function computeScore(dots){
 
 
+    var board = computeCells(dots);
     var score = new O.Score();
 
     //border occupation
@@ -41,7 +43,7 @@ export function computeScore(board){
 }
 
 export function computeCells(dotsArray){
-    var voronoi = new Voronoi();
+    var voronoi = new V.Voronoi();
     var bbox = {xl: 0, xr: C.SIZE, yt: 0, yb: C.SIZE};
 
     var diagram = voronoi.compute(dotsArray, bbox);
@@ -72,6 +74,10 @@ export function buildShell(cell){
     }
 
     return points;
+}
+
+export function moveDot(dot, nx,ny) {
+    return new O.Dot(dot.team,nx,ny,dot.id);
 }
 
 export function samePoint(pA, pB){

@@ -18,6 +18,7 @@ var selectedDot = null;
 var dest = null;
 
 
+
 export function cancel(){
     if(dest){
         dest = null;
@@ -26,11 +27,15 @@ export function cancel(){
         selectedDot = null;
         console.info("Cancelling selected dot");
     }
-
 }
 
-export function commitInput(dots, input){
-    var output = sampleInput(dots, input);
+export function reset(){
+    selectedDot=null;
+    dest=null;
+}
+
+export function select(dots, input){
+    var output = whatIf(dots, input);
     if(output.valid){
         if(!selectedDot){
             selectedDot = output.selected[0];
@@ -45,7 +50,7 @@ export function commitInput(dots, input){
 
 }
 
-export function sampleInput(dots, input){
+export function whatIf(dots, input){
 
     if(!selectedDot){
         //we are currently selecting the moved dot
