@@ -42,6 +42,22 @@ export function computeScore(dots){
     return score;
 }
 
+
+export function deltaScores(beforeScore, afterScore){
+    var delta = new O.Score();
+    delta.villain.border = afterScore.villain.border - beforeScore.villain.border;
+    delta.hero.border = afterScore.hero.border - beforeScore.hero.border;
+
+    delta.villain.dots = afterScore.villain.dots - beforeScore.villain.dots;
+    delta.hero.dots = afterScore.hero.dots - beforeScore.hero.dots;
+
+    delta.villain.win = afterScore.villain.win;
+    delta.hero.win = afterScore.hero.win;
+
+    return delta
+    
+}
+
 export function computeCells(dotsArray){
     var voronoi = new V.Voronoi();
     var bbox = {xl: 0, xr: C.SIZE, yt: 0, yb: C.SIZE};

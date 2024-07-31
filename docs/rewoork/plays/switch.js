@@ -15,7 +15,9 @@ export function init(actionTeam){
 var firstDot = null;
 var secondDot = null;
 
-
+export function status(){
+    return "switch :"+(firstDot?"x":"_")+"<->"+(secondDot?"x":"_");
+}
 
 export function cancel(){
     if(secondDot){

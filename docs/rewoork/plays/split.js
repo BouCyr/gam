@@ -17,7 +17,9 @@ var team;
 var selectedDot = null;
 var dest = null;
 
-
+export function status(){
+    return "split :"+(selectedDot?"x":"_")+"->"+(dest?"x":"_");
+}
 
 export function cancel(){
     if(dest){

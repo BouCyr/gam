@@ -35,6 +35,9 @@ var team;
 var selectedDot = null;
 var dest = null;
 
+export function status(){
+    return subType+":"+(selectedDot?"x":"_")+"->"+(dest?"x":"_");
+}
 
 
 export function reset(){

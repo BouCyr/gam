@@ -5,6 +5,10 @@ import * as S from "./state.js";
  * Receiving and dispatching user input
  */
 
+const worker = new Worker('./iaWorker.js', { type: 'module' });
+worker.onerror = (data) => {
+    console.error(data);
+};
 
 /**
  * Last known position of the mouse cursor (in canvas coord)
@@ -54,11 +58,11 @@ function move(mouseEvent){
     mouse.y = mouseEvent.clientY - rect.top;
 }
 
-var cacheBusting = Math.random();//worker script is not reloaded 
+
 function iaLaunch(){
 
     console.log("Launching IA");
-    const worker = new Worker('./iaWorker.js?'+cacheBusting, { type: 'module' });
+
     worker.postMessage({
         dots: S.dots,
         //turn: S.turn, listed in currentcard

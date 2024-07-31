@@ -14,6 +14,11 @@ import * as SWITCH from "./plays/switch.js";
 
 var action;
 
+export function status(){
+    return (action?action.status():"no_action");
+}
+
+
 /**
  * (re)sets the state to handle the action
  * @param {*} deckCard 
