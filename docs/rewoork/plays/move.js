@@ -4,7 +4,7 @@ import * as F from "../functions.js";
 import * as R from "./result.js";
 
 export function initMove(actionTeam){
-    console.info("Starting a move");
+    console.debug("Starting a move");
 
     subType = C.CARD_MOVE;
     
@@ -14,7 +14,7 @@ export function initMove(actionTeam){
 }
 export function initLeap(actionTeam){
 
-    console.info("Starting a leap");
+    console.debug("Starting a leap");
     subType = C.CARD_LEAP;
     team = actionTeam;
     selectedDot = null;
@@ -22,7 +22,7 @@ export function initLeap(actionTeam){
 }
 export function initAttack(actionTeam){
 
-    console.info("Starting an attack");
+    console.debug("Starting an attack");
     subType = C.CARD_ATTACK;
     team = actionTeam;
     selectedDot = null;
@@ -62,16 +62,16 @@ export function select(dots, input){
     if(output.valid){
         if(!selectedDot){
             selectedDot = output.selected[0];
-            console.info(`We will move dot : ${selectedDot.id}`);
+            console.debug(`We will move dot : ${selectedDot.id}`);
         } else if(!dest){
             dest = output.moves[0].dot;
-            console.info(`We will move dot ${ selectedDot.id} to (${dest.x},${dest.y}) `);
+            console.debug(`We will move dot ${ selectedDot.id} to (${dest.x},${dest.y}) `);
         }
     }
 
     return output;
-
 }
+
 
 export function whatIf(dots, input){
 
@@ -82,7 +82,7 @@ export function whatIf(dots, input){
             return {
                 valid: true,
                 selected: [nearestDot],
-                dotFilter: oneOnMyDot(team)
+                cellFilter: cellFilter(nearestDot)
             }
         } else{
             return {
@@ -130,9 +130,9 @@ function isDestValid(dots, input){
     return cellFilter()(nearestToDest);
 }
 
-function cellFilter(){
+function cellFilter(selection = selectedDot){
 
-    if(!selectedDot){
+    if(!selection){
         console.error("Why do we check if a dest is valid when we do not have an origin ?");
         return () => false;
     }
@@ -140,7 +140,7 @@ function cellFilter(){
     switch(subType){
         case C.CARD_ATTACK : return anyDot(); 
         case C.CARD_LEAP : return oneOnMyDot(team);
-        case C.CARD_MOVE : return me(selectedDot);
+        case C.CARD_MOVE : return me(selection);
         default : console.error("???"); return ()=>false;
     }
 }

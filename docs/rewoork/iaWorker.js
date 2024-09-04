@@ -5,6 +5,8 @@ import * as P from "./play.js";
 import * as F from "./functions.js";
 
 
+const GRANULARITY = 10;
+
 self.onmessage = function(e) {
 
     var startTime = performance.now()
@@ -14,7 +16,8 @@ self.onmessage = function(e) {
     var msg = e.data;
 
     const playingteam = msg.card.team;
-    console.info(`Launching IA for ${playingteam}`);
+    var startDate = new Date();
+    console.info(`Launching IA for ${playingteam}, @ ${startDate}()`);
     //reinit a state
     S.iaInit(
         msg.card,
@@ -24,7 +27,7 @@ self.onmessage = function(e) {
     P.init(msg.card);
     const scoreBefore = F.computeScore(S.dots);
 
-    //dummy check well outisde the select range to grab the initial filters
+    //dummy check well outside the select range to grab the initial filters
     var outcome = P.whatIfISelect({x:-2*C.SELECT_RANGE, y:-2*C.SELECT_RANGE});
 
     var dotFilter = outcome.dotFilter;
@@ -32,10 +35,12 @@ self.onmessage = function(e) {
 
 
     var inputCandidates = getCandidates( dotFilter, cellFilter);
+    console.info(`${inputCandidates.length} candidates for first selection`);
 
     var plays = [];
-    console.info(P.status());
-    inputCandidates.forEach(candidate => {
+
+    //some() will stop as soon as an execution return 'true'
+    inputCandidates.some(candidate => {
         //reinit state ; it has been mutated by our action below
         S.iaInit(
             msg.card,
@@ -43,12 +48,14 @@ self.onmessage = function(e) {
             msg.decks
         );
         P.init(msg.card);
-        var whatIf2 = P.whatIfISelect({x:-2*C.SELECT_RANGE, y:-2*C.SELECT_RANGE});
+        var whatIf2 = P.select(candidate);
         var secondCandidates = getCandidates(
             whatIf2.dotFilter,
             whatIf2.cellFilter
         );
-        secondCandidates.forEach(candidate2 => {
+        console.info(`${secondCandidates.length} candidates for second selection`);
+        //some() will stop as soon as an execution return 'true'
+        secondCandidates.some(candidate2 => {
             S.iaInit(
                 msg.card,
                 msg.dots,
@@ -57,7 +64,6 @@ self.onmessage = function(e) {
             P.init(msg.card);
             P.select(candidate);
             P.select(candidate2); //will update state and so on
-            console.info(P.status());
 
             var score = F.computeScore(S.dots);
             var deltaScore = F.deltaScores(scoreBefore, score);
@@ -65,15 +71,35 @@ self.onmessage = function(e) {
                 plays: [candidate, candidate2],
                 delta: deltaScore,
                 evaluation : evaluateOutcome(playingteam, deltaScore)
-            })
+            });
+            return isComputationTimeout(startTime);
         });
+        return isComputationTimeout(startTime);;
     });
 
 
 
-    var endTime = performance.now()
-    console.log(`IA computation took ${endTime - startTime} milliseconds`)
+    console.log(`IA computation took ${computationTimeMs(startTime)} milliseconds`);
+    console.log(`IA evaluated ${plays.length} possibilities`);
+    console.info(`${startDate} -> ${new Date}()`);
+
+    //find besst play
+    plays.sort((a,b)=>b.evaluation-a.evaluation)
+    postMessage(plays[0]);
+    return;
  }
+
+function isComputationTimeout(startTime){
+    var longerThanMax = computationTimeMs(startTime) > C.MAX_IA_THINK_TIME_ms;
+    if(longerThanMax){
+        console.info("IA thought for longer than max time ; breaking");
+    }
+    return longerThanMax;
+}
+
+function computationTimeMs(startTime){
+    return performance.now() - startTime;
+}
 
  //#region INPUTS 
  function getCandidates( dotFilter, cellFilter){
@@ -82,7 +108,7 @@ self.onmessage = function(e) {
     }else if(cellFilter){
         return possiblePoints(cellFilter);
     }else{
-        console.warn("neiher dot nor cell?");
+        console.warn("neither dot nor cell?");
         return [];
     }
  }
@@ -93,16 +119,18 @@ self.onmessage = function(e) {
 
  function possiblePoints( cellFilter){
     var result = [];
-    const GRANULARITY = 3;
 
     for(let x = 0 ; x < C.SIZE ; x += GRANULARITY){
         for(let y = 0 ; y < C.SIZE ; y += GRANULARITY){
             var point = {x:x, y:y};
-            if(cellFilter(point)){
+            var nearestDot = F.nearestDot(S.dots, point);
+            if(cellFilter(nearestDot)){
                 result.push(point);
             }
         }
     }
+    F.shuffle(result);
+    //TODO : add interesting points (between two dots/middle o two dots, voronoi vertices)
     return result;
  }
  //#endregion

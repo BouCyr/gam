@@ -236,3 +236,16 @@ export function calcAngle(a, b) {
     var dy = b.y - a.y; 
     return Math.atan2(dy, dx) ;
 }
+
+/* Durstenfeld shuffle */
+export function shuffle(array) {
+    for (var index = array.length - 1; index >= 0; index--) {
+        //index+1 => see https://blog.codinghorror.com/the-danger-of-naivete/
+        var newPos = Math.floor(Math.random() * (index + 1));
+
+        //swap
+        var temp = array[index];
+        array[index] = array[newPos];
+        array[newPos] = temp;
+    }
+}

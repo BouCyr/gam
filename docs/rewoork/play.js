@@ -14,8 +14,8 @@ import * as SWITCH from "./plays/switch.js";
 
 var action;
 
-export function status(){
-    return (action?action.status():"no_action");
+export function currentAction(){
+    return action;
 }
 
 
@@ -26,7 +26,7 @@ export function status(){
 export function init(deckCard){
     action = fromCard(deckCard);
 
-    console.log("Action initialized");
+    console.debug("Action initialized");
 }
 
 export function whatIfISelect(mouse){
@@ -36,11 +36,9 @@ export function whatIfISelect(mouse){
 }
 export function select(mouse){
     var outcome =  action.select(S.dots, mouse);
-    
-    if(outcome.done == true){
+    if(outcome.done){
         S.onActionDone(outcome);
     }
-
     return outcome;
 }
 export function cancel(mouse){

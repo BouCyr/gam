@@ -43,7 +43,8 @@ export function init(){
 
 function leftClick(e){
     
-    P.select(mouse);
+    var outcome = P.select(mouse);
+
 }
 
 function rightClick(e){
@@ -63,11 +64,25 @@ function iaLaunch(){
 
     console.log("Launching IA");
 
+    var start  = performance.now();
     worker.postMessage({
         dots: S.dots,
         //turn: S.turn, listed in currentcard
         card: S.currentCard,
         decks : S.decks
     });
+
+    worker.onmessage = (msg)=>{
+        var time = performance.now() - start;
+        console.info(`IA returned result in ${time}ms`)
+
+        msg.data.plays.forEach(play => P.select(play));
+
+    };
+    worker.onerror = (x)=>{
+        var time = performance.now() - start;
+        console.info(`IA returned error in ${time}ms`)
+    };
+    
 
 }

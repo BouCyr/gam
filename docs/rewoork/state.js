@@ -52,17 +52,17 @@ export function reset(){
 
 
     
-    addCardToDeck(C.TEAM_HERO, C.CARD_SWITCH);
-    addCardToDeck(C.TEAM_HERO, C.CARD_MOVE);
-    addCardToDeck(C.TEAM_HERO, C.CARD_ATTACK);
-    addCardToDeck(C.TEAM_HERO, C.CARD_LEAP);
     addCardToDeck(C.TEAM_HERO, C.CARD_SPLIT);
+    addCardToDeck(C.TEAM_HERO, C.CARD_MOVE);
+    addCardToDeck(C.TEAM_HERO, C.CARD_LEAP);
+    addCardToDeck(C.TEAM_HERO, C.CARD_SWITCH);
+    addCardToDeck(C.TEAM_HERO, C.CARD_ATTACK);
 
-    addCardToDeck(C.TEAM_VILLAIN, C.CARD_SWITCH);
-    addCardToDeck(C.TEAM_VILLAIN, C.CARD_MOVE);
-    addCardToDeck(C.TEAM_VILLAIN, C.CARD_ATTACK);
-    addCardToDeck(C.TEAM_VILLAIN, C.CARD_LEAP);
     addCardToDeck(C.TEAM_VILLAIN, C.CARD_SPLIT);
+    addCardToDeck(C.TEAM_VILLAIN, C.CARD_MOVE);
+    addCardToDeck(C.TEAM_VILLAIN, C.CARD_LEAP);
+    addCardToDeck(C.TEAM_VILLAIN, C.CARD_SWITCH);
+    addCardToDeck(C.TEAM_VILLAIN, C.CARD_ATTACK);
 
     turn = C.TEAM_NOONE;
 

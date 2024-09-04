@@ -10,7 +10,7 @@ export const TEAM_NOONE = "NOBODY";
 
 export const EPSILON = 0.00000000001;
 
-export const MAX_IA_THINK_TIME_ms = 300;
+export const MAX_IA_THINK_TIME_ms = 500; //3000;
 
 export const HERO_NAMES = [
     "Gustav",
