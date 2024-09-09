@@ -18,6 +18,12 @@ export function currentAction(){
     return action;
 }
 
+export function label(){
+    if(action)
+        return action.label();
+    else
+        return "no action set?";
+}
 
 /**
  * (re)sets the state to handle the action

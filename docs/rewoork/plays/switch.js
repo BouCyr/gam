@@ -20,6 +20,11 @@ export function status(){
     return "switch :"+(firstDot?"x":"_")+"<->"+(secondDot?"SET":"_");
 }
 
+export function label(){
+    return 'Player <span class="player">'+(team === C.TEAM_HERO?C.NAME_HERO:C.NAME_VILLAIN)+"</span> switches the position of one of its dot with the position"
+    +" of one of its neighbour of <span class='oppo'>"+(team === C.TEAM_HERO?C.NAME_HERO:C.NAME_VILLAIN)+"</span>. ";
+}
+
 export function cancel(){
     if(secondDot){
         secondDot = null;

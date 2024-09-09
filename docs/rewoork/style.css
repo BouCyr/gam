@@ -69,22 +69,46 @@ body {
 }
 
 main {
+    padding: 2em 0;
     display: flex;
     justify-content: center;
+}
 
-    padding: 2em 0;
+#cardLabel {
+    padding: 1em;
+    font-weight: bold;
+}
+
+.teamBorder {
     border: calc(3*var(--border)) solid #ccc;
     border-radius: 20px;    
     transition: all 0.5s;
 }
 
-.turnH main {
+.turnH .teamBorder {
     border-color: var(--hero-h);
     background-color: var(--hero-hhh);
 }
-.turnV main {
+.turnV .teamBorder {
     border-color: var(--villain-h);
     background-color: var(--villain-hhh);
+}
+
+.player{
+    font-weight: bolder;
+}
+
+.turnH .player{
+    color: var(--hero);
+}
+.turnV .player{
+    color: var(--villain);
+}
+.turnH .oppo{
+    color: var(--villain);
+}
+.turnV .oppo{
+    color: var(--oppo);
 }
 
 button{
@@ -155,11 +179,6 @@ button{
     border-bottom: 3px solid var(--villain);
 }
 
-/* TODO DELETE */
-#cards {
-    display: flex;
-    justify-content: center;
-}
 
 .deck{
     width:80px;
@@ -219,9 +238,6 @@ button{
     text-shadow: 0 0 8px #ffffff, 0 0 1px #ffffff;
 }
 
-#cards{
-    margin-top: 2em;
-}
 
 
 /*for PLAYED card*/

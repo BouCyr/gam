@@ -17,6 +17,10 @@ var team;
 var selectedDot = null;
 var dest = null;
 
+export function label(){
+    return 'Player <span class="player ">'+(team === C.TEAM_HERO?C.NAME_HERO:C.NAME_VILLAIN)+"</span> divides one of its dot into two dots, mirrored around the original dot.<br/> Both must be in the area of the original dot. ";
+}
+
 export function status(){
     return "split :"+(selectedDot?"x":"_")+"->"+(dest?"x":"_");
 }

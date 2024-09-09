@@ -8,9 +8,12 @@ export const TEAM_VILLAIN = "villains";
 export const TEAM_HERO = "heros";
 export const TEAM_NOONE = "NOBODY";
 
+export const NAME_HERO = "Hero";
+export const NAME_VILLAIN = "Villain";
+
 export const EPSILON = 0.00000000001;
 
-export const MAX_IA_THINK_TIME_ms = 500; //3000;
+export const MAX_IA_THINK_TIME_ms = 1500;
 
 export const HERO_NAMES = [
     "Gustav",

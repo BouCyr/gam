@@ -24,6 +24,8 @@ export function update(msSinceStart){
       drawCurrentTeam();
       drawScore();
       drawDecks();
+
+      drawLabel();
     }
     
 }
@@ -37,6 +39,12 @@ function drawCurrentTeam()
     document.querySelector("body").classList.add("turnV");
     document.querySelector("body").classList.remove("turnH");
   }
+}
+
+function drawLabel(){
+  var label = P.label();
+  document.getElementById("cardLabel").innerHTML=label;
+
 }
 
 function drawDecks(){
