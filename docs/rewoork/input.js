@@ -65,6 +65,7 @@ function iaLaunch(){
     console.log("Launching IA");
 
     var start  = performance.now();
+    document.getElementById("theBody").classList.add("iaWaiting");
     worker.postMessage({
         dots: S.dots,
         //turn: S.turn, listed in currentcard
@@ -77,11 +78,13 @@ function iaLaunch(){
         console.info(`IA returned result in ${time}ms`)
 
         msg.data.plays.forEach(play => P.select(play));
+        document.getElementById("theBody").classList.remove("iaWaiting");
 
     };
     worker.onerror = (x)=>{
         var time = performance.now() - start;
         console.info(`IA returned error in ${time}ms`)
+        document.getElementById("theBody").classList.remove("iaWaiting");
     };
     
 

@@ -46,6 +46,11 @@ body {
     align-items: center;
 }
 
+
+.iaWaiting{
+    cursor : wait;
+}
+
 /* double underline (one is the text decoration, the other is a border bottom) */
 #titleContent {
     text-decoration: underline;

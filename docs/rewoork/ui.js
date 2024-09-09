@@ -106,8 +106,14 @@ function drawAction(msSinceStart){
   // fobidden cells
   if(outcomeIfCommited.cellFilter){
     var board = F.computeCells(S.dots);
-    var forbidden = board.cells.filter(cell => !outcomeIfCommited.cellFilter(cell.site));
-    B.drawCells(forbidden, true);
+
+    try{
+      var forbidden = board.cells.filter(cell => !outcomeIfCommited.cellFilter(cell.site));
+      B.drawCells(forbidden, true);
+    }catch{
+    //TODO happens on split, when something is wrong at initail select (?)
+      console.warn("wat?");
+    }
   }
 
 

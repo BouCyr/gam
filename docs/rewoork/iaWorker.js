@@ -63,15 +63,20 @@ self.onmessage = function(e) {
             );
             P.init(msg.card);
             P.select(candidate);
-            P.select(candidate2); //will update state and so on
+            var outcome = P.select(candidate2); //will update state and so on
+            if(outcome.valid){
+                //sometimes, an outcome is invalid for a valid candidate 
+                //e.g. for split, cellFilter() indentifies the whole cell. Some part of it will be invalid (when mirror is outside the cell)
+                var score = F.computeScore(S.dots);
+                var deltaScore = F.deltaScores(scoreBefore, score);
+                plays.push({
+                    plays: [candidate, candidate2],
+                    delta: deltaScore,
+                    evaluation : evaluateOutcome(playingteam, deltaScore)
+                });
+            }
 
-            var score = F.computeScore(S.dots);
-            var deltaScore = F.deltaScores(scoreBefore, score);
-            plays.push({
-                plays: [candidate, candidate2],
-                delta: deltaScore,
-                evaluation : evaluateOutcome(playingteam, deltaScore)
-            });
+
             return isComputationTimeout(startTime);
         });
         return isComputationTimeout(startTime);;

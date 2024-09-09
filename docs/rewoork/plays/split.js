@@ -5,7 +5,7 @@ import * as O from "../objects.js";
 import * as R from "./result.js";
 
 export function init(actionTeam){
-    console.info("Starting a pslit");
+    console.info("Starting a split");
     
     team = actionTeam;
     selectedDot = null;
@@ -61,7 +61,7 @@ export function whatIf(dots, input){
             return {
                 valid: true,
                 selected: [nearestDot],
-                dotFilter: (dot)=>dot.team === team
+                cellFilter: isCellValid
             }
         } else{
             return {
