@@ -37,9 +37,9 @@ var dest = null;
 
 export function label(){
     switch(subType) {
-        case C.CARD_ATTACK : return 'Player <span class="player ">'+(team === C.TEAM_HERO?C.NAME_HERO:C.NAME_VILLAIN)+"</span> must move one of its dot anywhere (even in one of <span class='oppo'>"+(team === C.TEAM_HERO?C.NAME_HERO:C.NAME_VILLAIN)+"</span> cell).";
-        case C.CARD_LEAP :   return 'Player <span class="player ">'+(team === C.TEAM_HERO?C.NAME_HERO:C.NAME_VILLAIN)+'</span> must move one of its dot inside any <span class="player ">'+(team === C.TEAM_HERO?C.NAME_HERO:C.NAME_VILLAIN)+"</span> cell.";
-        case C.CARD_MOVE :   return 'Player <span class="player ">'+(team === C.TEAM_HERO?C.NAME_HERO:C.NAME_VILLAIN)+"</span> must move one of its dot inside its own cell.";
+        case C.CARD_ATTACK : return '<span class="player ">You</span> move one of your dot anywhere (even in one of the <span class="oppo">'+(team === C.TEAM_HERO?C.NAME_VILLAIN:C.NAME_HERO)+"</span> cell).";
+        case C.CARD_LEAP :   return '<span class="player ">You</span> move one of your dot inside any of <span class="player ">your</span> cells.';
+        case C.CARD_MOVE :   return '<span class="player ">You</span> move one of your dot inside its own cell.';
         default : return "??"+subType+"??";
     }
 

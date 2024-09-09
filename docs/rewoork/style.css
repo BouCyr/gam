@@ -108,7 +108,7 @@ main {
     color: var(--villain);
 }
 .turnV .oppo{
-    color: var(--oppo);
+    color: var(--hero);
 }
 
 button{
