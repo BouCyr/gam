@@ -7,14 +7,18 @@ import * as R from "./result.js";
 export function init(actionTeam){
     console.info("Starting a switch");
     
+    team = actionTeam;
     firstDot = null;
     secondDot = null;
 }
 
-
+var team = null;
 var firstDot = null;
 var secondDot = null;
 
+export function status(){
+    return "switch :"+(firstDot?"x":"_")+"<->"+(secondDot?"SET":"_");
+}
 
 export function cancel(){
     if(secondDot){
@@ -24,11 +28,15 @@ export function cancel(){
         firstDot = null;
         console.info("Cancelling firstDot");
     }
-
 }
 
-export function commitInput(dots, input){
-    var output = sampleInput(dots, input);
+export function reset(){
+    firstDot=null;
+    secondDot=null;
+}
+
+export function select(dots, input){
+    var output = whatIf(dots, input);
     if(output.valid){
         if(!firstDot){
             firstDot = output.selected[0];
@@ -41,22 +49,23 @@ export function commitInput(dots, input){
 
 }
 
-export function sampleInput(dots, input){
+export function whatIf(dots, input){
     var nearestDot = F.dotInRange(dots, input);
         
     if(!firstDot){
         //we are currently selecting the first dot ; any dot can do
-        if(nearestDot && hasOppoNeighbour(nearestDot, dots)){
+        if(nearestDot && (nearestDot.team === team) && hasOppoNeighbour(nearestDot, dots)){
             return {
                 valid: true,
                 selected: [nearestDot],
-                dotFilter: (dot)=>hasOppoNeighbour(dot, dots)
+                //next will be oppo team
+                dotFilter: (dot)=>validSecondDot(dots, dot)
             }
         }else{
             return {
                 valid: false,
                 selected: [],
-                dotFilter: (dot)=>hasOppoNeighbour(dot, dots)
+                dotFilter: (dot)=> (dot.team === team) && hasOppoNeighbour(dot, dots)
             }
         }
     }else if(!secondDot){
@@ -90,7 +99,7 @@ function validSecondDot(dots, dot){
     if(!firstDot)
         return false;
 
-    return F.areNeighbours(dots, firstDot, dot) && firstDot.team!==dot.team;
+    return (dot.team !== team) && F.areNeighbours(dots, firstDot, dot) && firstDot.team!==dot.team;
 }
 
 function hasOppoNeighbour(dot, dots){

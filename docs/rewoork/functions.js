@@ -1,5 +1,6 @@
 import * as C from "./constants.js";
 import * as O from "./objects.js";
+import * as V from './rhill-voronoi-core-module.js';
 
 
 export function inBounds(point){
@@ -8,9 +9,10 @@ export function inBounds(point){
 }
 
 
-export function computeScore(board){
+export function computeScore(dots){
 
 
+    var board = computeCells(dots);
     var score = new O.Score();
 
     //border occupation
@@ -40,8 +42,24 @@ export function computeScore(board){
     return score;
 }
 
+
+export function deltaScores(beforeScore, afterScore){
+    var delta = new O.Score();
+    delta.villain.border = afterScore.villain.border - beforeScore.villain.border;
+    delta.hero.border = afterScore.hero.border - beforeScore.hero.border;
+
+    delta.villain.dots = afterScore.villain.dots - beforeScore.villain.dots;
+    delta.hero.dots = afterScore.hero.dots - beforeScore.hero.dots;
+
+    delta.villain.win = afterScore.villain.win;
+    delta.hero.win = afterScore.hero.win;
+
+    return delta
+    
+}
+
 export function computeCells(dotsArray){
-    var voronoi = new Voronoi();
+    var voronoi = new V.Voronoi();
     var bbox = {xl: 0, xr: C.SIZE, yt: 0, yb: C.SIZE};
 
     var diagram = voronoi.compute(dotsArray, bbox);
@@ -72,6 +90,10 @@ export function buildShell(cell){
     }
 
     return points;
+}
+
+export function moveDot(dot, nx,ny) {
+    return new O.Dot(dot.team,nx,ny,dot.id);
 }
 
 export function samePoint(pA, pB){
@@ -213,4 +235,17 @@ export function calcAngle(a, b) {
     var dx = b.x - a.x;	
     var dy = b.y - a.y; 
     return Math.atan2(dy, dx) ;
+}
+
+/* Durstenfeld shuffle */
+export function shuffle(array) {
+    for (var index = array.length - 1; index >= 0; index--) {
+        //index+1 => see https://blog.codinghorror.com/the-danger-of-naivete/
+        var newPos = Math.floor(Math.random() * (index + 1));
+
+        //swap
+        var temp = array[index];
+        array[index] = array[newPos];
+        array[newPos] = temp;
+    }
 }

@@ -14,6 +14,11 @@ import * as SWITCH from "./plays/switch.js";
 
 var action;
 
+export function currentAction(){
+    return action;
+}
+
+
 /**
  * (re)sets the state to handle the action
  * @param {*} deckCard 
@@ -21,26 +26,29 @@ var action;
 export function init(deckCard){
     action = fromCard(deckCard);
 
-    console.log("Action initialized");
+    console.debug("Action initialized");
 }
 
-export function actionStatus(mouse){
-    var outcome = action.sampleInput(S.dots, mouse);
-    //TODO : surrounded dots
-
+export function whatIfISelect(mouse){
+    var outcome = action.whatIf(S.dots, mouse);
+    
     return outcome;
 }
-export function click(mouse){
-    var outcome =  action.commitInput(S.dots, mouse);
-    //TODO : surrounded dots
-    if(outcome.done == true){
+export function select(mouse){
+    var outcome =  action.select(S.dots, mouse);
+    if(outcome.done){
         S.onActionDone(outcome);
     }
-
     return outcome;
 }
 export function cancel(mouse){
     return action.cancel();
+}
+/** 
+ * Used by IA to reset before trying another input
+ */
+export function reset(){
+    return action.reset();
 }
 
 function fromCard(deckCard){

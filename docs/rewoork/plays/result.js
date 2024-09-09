@@ -4,7 +4,7 @@ import * as C from "../constants.js";
 
 /*
 
-an outomce has/may have the following fields:
+an outcome has/may have the following fields:
 
 done: true/false : if true, no more action is required for this play, outcome can be applied to state
 valid : true/false (true is input can be applied)
@@ -27,7 +27,7 @@ export function Move( dot, dest){
             x: dot.x,
             y: dot.y
         },
-        dot: dot.move(dest.x, dest.y)
+        dot: F.moveDot(dot, dest.x, dest.y)
     }
 
 }

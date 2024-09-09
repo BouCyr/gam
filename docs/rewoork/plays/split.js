@@ -5,7 +5,7 @@ import * as O from "../objects.js";
 import * as R from "./result.js";
 
 export function init(actionTeam){
-    console.info("Starting a pslit");
+    console.info("Starting a split");
     
     team = actionTeam;
     selectedDot = null;
@@ -17,6 +17,9 @@ var team;
 var selectedDot = null;
 var dest = null;
 
+export function status(){
+    return "split :"+(selectedDot?"x":"_")+"->"+(dest?"x":"_");
+}
 
 export function cancel(){
     if(dest){
@@ -26,11 +29,15 @@ export function cancel(){
         selectedDot = null;
         console.info("Cancelling selected dot");
     }
-
 }
 
-export function commitInput(dots, input){
-    var output = sampleInput(dots, input);
+export function reset(){
+    selectedDot=null;
+    dest=null;
+}
+
+export function select(dots, input){
+    var output = whatIf(dots, input);
     if(output.valid){
         if(!selectedDot){
             selectedDot = output.selected[0];
@@ -45,7 +52,7 @@ export function commitInput(dots, input){
 
 }
 
-export function sampleInput(dots, input){
+export function whatIf(dots, input){
 
     if(!selectedDot){
         //we are currently selecting the moved dot
@@ -54,7 +61,7 @@ export function sampleInput(dots, input){
             return {
                 valid: true,
                 selected: [nearestDot],
-                dotFilter: (dot)=>dot.team === team
+                cellFilter: isCellValid
             }
         } else{
             return {

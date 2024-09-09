@@ -1,18 +1,26 @@
 <html lang="fr">
 <head>
     <link href="./style.css" rel="stylesheet">
+    <link as="worker" href="./iaWorker.js" rel="prefetch" type="text/javascript">
+    <link as="worker" href="./iaWorker.js" rel="preload" type="text/javascript">
+    <link as="script" href="./iaWorker.js" rel="preload" type="text/javascript">
+
+    <link href="./ico/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
+    <link href="./ico/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
+    <link href="./ico/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
+    <link href="./ico/site.webmanifest" rel="manifest">
 </head>
-<body>
+<body id="theBody">
 <header>
     <h1><span id="titleContent">Voronoi battle</span></h1>
 </header>
 <main>
-        <aside id="heros">
-            <h3>Good guys</h3>
+    <aside id="heros">
+        <h3>Good guys</h3>
 
-            <div class="scoreHolder">
-                <h4>Border</h4>
-                <p class="percent"><span class="score" score="borderPct"></span></p>
+        <div class="scoreHolder">
+            <h4>Border</h4>
+            <p class="percent"><span class="score" score="borderPct"></span></p>
             </div>
             <div class="deck">
 
@@ -64,7 +72,6 @@
 </dialog>
 </body>
 
-<script src="./rhill-voronoi-core.min.js"></script>
 <script type="module">
 
 import * as root from "./alpha.js";
@@ -76,12 +83,7 @@ function init(){
 
 init();
 
-document.getElementById("iaLaunch").addEventListener("click", (e)=>{
-    console.log("Launching IA");
-    const worker = new Worker('ia.js', { type: 'module' });
-    worker.postMessage("PING");
 
-});
 
 
 </script>
