@@ -15,6 +15,8 @@ worker.onerror = (data) => {
  */
 export var mouse = {x:0, y:0};
 
+var uiDisabled = false;
+
 /*
 setup UI
 */
@@ -42,13 +44,15 @@ export function init(){
 }
 
 function leftClick(e){
-    
-    var outcome = P.select(mouse);
-
+    if(!uiDisabled) {
+        var outcome = P.select(mouse);
+    }
 }
 
 function rightClick(e){
-    P.cancel(mouse);
+    if(!uiDisabled) {
+        P.cancel(mouse);
+    }
 }
 
 function move(mouseEvent){
@@ -60,16 +64,25 @@ function move(mouseEvent){
 }
 
 
-function iaLaunch(){
+function disableInput(){
+    document.getElementById("theBody").classList.add("iaWaiting");
+    uiDisabled = true;
+}
+function enableInput(){
+    document.getElementById("theBody").classList.remove("iaWaiting");
+    uiDisabled = false;
+}
 
+function iaLaunch(){
+    
     console.log("Launching IA");
+    disableInput();
 
     var start  = performance.now();
-    document.getElementById("theBody").classList.add("iaWaiting");
+
     worker.postMessage({
-        dots: S.dots,
-        //turn: S.turn, listed in currentcard
-        card: S.currentCard,
+        dots  : S.dots,
+        card  : S.currentCard,
         decks : S.decks
     });
 
@@ -78,13 +91,14 @@ function iaLaunch(){
         console.info(`IA returned result in ${time}ms`)
 
         msg.data.plays.forEach(play => P.select(play));
-        document.getElementById("theBody").classList.remove("iaWaiting");
+        enableInput();
 
     };
     worker.onerror = (x)=>{
         var time = performance.now() - start;
         console.info(`IA returned error in ${time}ms`)
         document.getElementById("theBody").classList.remove("iaWaiting");
+        enableInput();
     };
     
 

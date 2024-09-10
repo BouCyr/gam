@@ -13,7 +13,7 @@ export const NAME_VILLAIN = "Villain";
 
 export const EPSILON = 0.00000000001;
 
-export const MAX_IA_THINK_TIME_ms = 1500;
+export const MAX_IA_THINK_TIME_ms = 10000;//1500;
 
 export const HERO_NAMES = [
     "Gustav",
